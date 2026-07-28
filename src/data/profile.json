@@ -1,0 +1,38 @@
+{
+  "name": "Vijay Kardak",
+  "titles": ["DevOps Engineer", "Cloud Enthusiast", "Kubernetes Learner"],
+  "tagline": "I build the pipelines that ship other people's ideas.",
+  "location": "Maharashtra, India",
+  "email": "vijaykardak96k@gmail.com",
+  "github": "vijaykardak96k-dev",
+  "githubUrl": "https://github.com/vijaykardak96k-dev",
+  "linkedin": "Vijay Kardak",
+  "linkedinUrl": "https://www.linkedin.com/in/vijay-kardak",
+  "whatsapp": "8010906561",
+  "whatsappUrl": "https://wa.me/918010906561",
+  "instagram": "vijay_kardak_07",
+  "instagramUrl": "https://instagram.com/vijay_kardak_07",
+  "about": {
+    "story": [
+      "I started out breaking Linux installs on purpose, just to learn how to fix them. That habit never really went away — it just got a YAML file and a CI pipeline attached to it.",
+      "DevOps found me somewhere between a crashed EC2 instance and a Docker container that refused to stop restarting. What kept me here wasn't the tools, it was the idea that reliability is a design decision, not an accident.",
+      "I care about systems that fail loudly, recover quietly, and never need a 2 AM phone call twice for the same reason."
+    ],
+    "whyDevOps": "Because the interesting part of software was never the last line of code — it was everything that happens after: build, ship, watch, fix, repeat. DevOps is the discipline of making that loop boring, in the best possible way.",
+    "learningMindset": "I learn in public and in production-shaped sandboxes. Every tool on this site got there because I broke it first, then wrote down what fixed it.",
+    "goals": [
+      "Go deep on Kubernetes internals, not just kubectl commands",
+      "Get comfortable running GitOps workflows with ArgoCD end to end",
+      "Build a home lab that mirrors real production observability stacks",
+      "Contribute to an open-source DevOps tool"
+    ]
+  },
+  "stats": [
+    { "label": "Projects Shipped", "value": 6, "suffix": "+" },
+    { "label": "Tools in the Belt", "value": 30, "suffix": "+" },
+    { "label": "Docker Images Built", "value": 120, "suffix": "+" },
+    { "label": "Uptime Obsession", "value": 99, "suffix": "%" }
+  ],
+  "currentlyLearning": ["Helm", "ArgoCD", "Prometheus", "Grafana"],
+  "resumeFile": "/resume.pdf"
+}

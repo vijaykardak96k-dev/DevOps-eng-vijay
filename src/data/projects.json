@@ -1,0 +1,241 @@
+[
+  {
+    "id": "ci-cd-pipeline-eks",
+    "title": "Zero-Touch CI/CD Pipeline to EKS",
+    "tagline": "Push to main, watch it land in production.",
+    "description": "A fully automated pipeline that takes a commit from GitHub through build, security scan, and deploy into an Amazon EKS cluster — no manual kubectl apply, ever.",
+    "image": "/projects/ci-cd-pipeline.svg",
+    "featured": true,
+    "status": "completed",
+    "techStack": ["GitHub Actions", "Docker", "Terraform", "AWS EKS", "Trivy", "SonarQube"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/ci-cd-pipeline-eks",
+    "demoUrl": "",
+    "details": {
+      "overview": "This project automates the full lifecycle of a containerized application: every push triggers a build, a static code scan, an image vulnerability scan, and a rolling deploy to a Kubernetes cluster on AWS, provisioned entirely with Terraform.",
+      "architecture": "GitHub Actions runs on push → builds a Docker image → SonarQube scans code quality → Trivy scans the image for CVEs → image is pushed to ECR → a Helm chart is applied to an EKS cluster provisioned by Terraform → rollout status is verified before the job is marked green.",
+      "features": [
+        "One command Terraform provisioning for the entire EKS cluster and VPC",
+        "Automated image vulnerability scanning that fails the build on critical CVEs",
+        "Blue/green style rolling deployments with automatic rollback on failed health checks",
+        "Slack notification on deploy success or failure"
+      ],
+      "folderStructure": [
+        "infra/ – Terraform modules for VPC, EKS, IAM",
+        "helm/ – Helm chart for the application",
+        ".github/workflows/ – pipeline definitions",
+        "app/ – sample containerized service"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "IAM least-privilege for CI service accounts is worth the extra setup time",
+        "Rollout health checks matter more than the deploy step itself"
+      ],
+      "challenges": [
+        "Getting Terraform state locking right across multiple environments",
+        "Tuning readiness probes so rollbacks triggered fast enough to matter"
+      ],
+      "futureImprovements": [
+        "Swap manual Helm apply for ArgoCD-driven GitOps",
+        "Add canary deployments with automated traffic shifting"
+      ]
+    }
+  },
+  {
+    "id": "k8s-observability-stack",
+    "title": "Kubernetes Observability Stack",
+    "tagline": "If it's running in the cluster, I can see it.",
+    "description": "A self-hosted monitoring stack for Kubernetes bringing metrics, dashboards, and alerting together for every workload in the cluster.",
+    "image": "/projects/observability-stack.svg",
+    "featured": true,
+    "status": "learning",
+    "techStack": ["Kubernetes", "Prometheus", "Grafana", "Helm"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/k8s-observability-stack",
+    "demoUrl": "",
+    "details": {
+      "overview": "A learning-focused project to stand up a production-shaped observability stack: Prometheus scraping cluster and application metrics, Grafana dashboards for visualization, and alerting rules for the failure modes that actually matter.",
+      "architecture": "Prometheus Operator deployed via Helm scrapes node-exporter and kube-state-metrics, plus custom application metrics exposed on /metrics. Grafana reads from Prometheus as a data source and renders pre-built dashboards. Alertmanager routes critical alerts to Slack.",
+      "features": [
+        "Pre-built Grafana dashboards for node, pod, and application-level metrics",
+        "Custom alerting rules for pod crash loops and memory pressure",
+        "Helm values file to toggle which exporters get deployed"
+      ],
+      "folderStructure": [
+        "helm-values/ – custom values.yaml overrides",
+        "dashboards/ – exported Grafana JSON dashboards",
+        "alerts/ – Prometheus alerting rules"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Cardinality matters — over-labeling metrics quietly kills Prometheus performance",
+        "A good dashboard answers a question, it doesn't just display numbers"
+      ],
+      "challenges": [
+        "Right-sizing Prometheus storage retention on a small home lab cluster",
+        "Writing alert rules with just enough sensitivity to not create alert fatigue"
+      ],
+      "futureImprovements": [
+        "Add Loki for log aggregation alongside metrics",
+        "Wire alerts into an on-call rotation tool"
+      ]
+    }
+  },
+  {
+    "id": "gitops-argocd-demo",
+    "title": "GitOps Delivery with ArgoCD",
+    "tagline": "Git is the single source of truth. ArgoCD makes sure the cluster agrees.",
+    "description": "A GitOps workflow where every cluster change starts as a pull request, and ArgoCD continuously reconciles the live cluster state to match Git.",
+    "image": "/projects/gitops-argocd.svg",
+    "featured": false,
+    "status": "learning",
+    "techStack": ["ArgoCD", "Kubernetes", "Helm", "GitHub"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/gitops-argocd-demo",
+    "demoUrl": "",
+    "details": {
+      "overview": "A small but complete GitOps setup: application manifests live in a Git repo, ArgoCD watches that repo, and any drift between the repo and the live cluster gets automatically corrected.",
+      "architecture": "ArgoCD Application resources point at a Git repo containing Helm charts. On every merge to main, ArgoCD detects the diff and syncs the cluster. Manual `kubectl edit` on any resource gets reverted automatically on the next reconciliation loop.",
+      "features": [
+        "Self-healing deployments — manual cluster edits get reverted to match Git",
+        "App-of-apps pattern to manage multiple services from one root application",
+        "Sync waves to control deployment order across dependent services"
+      ],
+      "folderStructure": [
+        "apps/ – ArgoCD Application manifests",
+        "charts/ – per-service Helm charts",
+        "environments/ – dev and staging value overrides"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "GitOps changes how you think about incidents — you fix the repo, not the cluster",
+        "Sync waves are essential once services have real dependencies between them"
+      ],
+      "challenges": [
+        "Understanding ArgoCD's reconciliation loop timing during first setup",
+        "Structuring the repo so dev and staging don't fight over the same values"
+      ],
+      "futureImprovements": [
+        "Add ArgoCD Notifications for Slack sync status",
+        "Introduce progressive delivery with Argo Rollouts"
+      ]
+    }
+  },
+  {
+    "id": "dockerized-mern-deployment",
+    "title": "Dockerized MERN Stack Deployment",
+    "tagline": "One docker-compose up, four services, zero setup docs needed.",
+    "description": "A full MERN application containerized with Docker Compose, reverse-proxied through NGINX, ready to run identically on a laptop or a server.",
+    "image": "/projects/mern-docker.svg",
+    "featured": true,
+    "status": "completed",
+    "techStack": ["Docker Compose", "NodeJS", "React", "MongoDB", "NGINX"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/dockerized-mern-deployment",
+    "demoUrl": "",
+    "details": {
+      "overview": "A MERN stack application (MongoDB, Express, React, Node) fully containerized so that the exact same environment runs in development and production, with NGINX handling reverse proxy and static asset serving.",
+      "architecture": "docker-compose orchestrates four services: a MongoDB container with a named volume for persistence, a Node/Express API container, a React frontend built into static assets, and an NGINX container reverse-proxying API calls and serving the frontend.",
+      "features": [
+        "Single command startup for the entire stack",
+        "Named volumes so database data survives container restarts",
+        "NGINX reverse proxy routing /api to the backend and everything else to the frontend build",
+        "Environment-based configuration via .env files, never hardcoded"
+      ],
+      "folderStructure": [
+        "client/ – React frontend",
+        "server/ – Express API",
+        "nginx/ – reverse proxy config",
+        "docker-compose.yml – service orchestration"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Multi-stage Docker builds cut the final image size dramatically",
+        "Named volumes vs bind mounts matters a lot for database durability"
+      ],
+      "challenges": [
+        "Getting NGINX to correctly proxy WebSocket connections for hot reload in dev",
+        "Keeping build times reasonable with proper Docker layer caching"
+      ],
+      "futureImprovements": [
+        "Add a docker-compose.prod.yml with resource limits",
+        "Move to a Kubernetes deployment for the same stack"
+      ]
+    }
+  },
+  {
+    "id": "terraform-aws-vpc-module",
+    "title": "Reusable Terraform AWS VPC Module",
+    "tagline": "Infrastructure you can read like documentation.",
+    "description": "A parameterized Terraform module that stands up a production-shaped VPC — public/private subnets, NAT, route tables, and security groups — in one apply.",
+    "image": "/projects/terraform-vpc.svg",
+    "featured": false,
+    "status": "completed",
+    "techStack": ["Terraform", "AWS", "VPC", "IAM"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/terraform-aws-vpc-module",
+    "demoUrl": "",
+    "details": {
+      "overview": "A reusable, parameterized Terraform module for standing up a secure AWS VPC: public and private subnets across multiple availability zones, a NAT gateway for outbound-only traffic, and security groups scoped to least privilege.",
+      "architecture": "Root module composes smaller modules for subnets, route tables, NAT gateways, and security groups. Variables control the number of AZs, CIDR ranges, and whether a NAT gateway is single or one-per-AZ.",
+      "features": [
+        "Multi-AZ public and private subnet layout out of the box",
+        "Configurable single NAT gateway or one-per-AZ for high availability",
+        "Sensible default security groups with clearly documented overrides"
+      ],
+      "folderStructure": [
+        "modules/subnets/",
+        "modules/nat/",
+        "modules/security-groups/",
+        "examples/basic/ – a working example root module"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Good module variables read like a checklist for what actually varies between environments",
+        "One-NAT-per-AZ is a cost decision as much as a reliability one"
+      ],
+      "challenges": [
+        "Designing variable defaults that are safe without being opinionated to the point of being unusable",
+        "Writing documentation clear enough that future-me doesn't need to re-read the source"
+      ],
+      "futureImprovements": [
+        "Publish the module to the Terraform Registry",
+        "Add automated `terraform plan` checks in CI on every PR"
+      ]
+    }
+  },
+  {
+    "id": "jenkins-multibranch-pipeline",
+    "title": "Jenkins Multibranch Pipeline with Quality Gates",
+    "tagline": "Every branch gets the same bar to clear.",
+    "description": "A Jenkins multibranch pipeline enforcing code quality and dependency security checks before any branch can be merged.",
+    "image": "/projects/jenkins-pipeline.svg",
+    "featured": false,
+    "status": "completed",
+    "techStack": ["Jenkins", "Maven", "SonarQube", "Nexus", "OWASP Dependency Check"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/jenkins-multibranch-pipeline",
+    "demoUrl": "",
+    "details": {
+      "overview": "A Jenkins multibranch pipeline that builds every branch with Maven, runs a SonarQube quality gate, checks dependencies with OWASP Dependency Check, and publishes passing artifacts to Nexus.",
+      "architecture": "Jenkinsfile defines stages for build, unit tests, SonarQube analysis, dependency check, and artifact publish. The pipeline fails fast on any quality gate breach, before an artifact ever reaches Nexus.",
+      "features": [
+        "Automatic pipeline creation for every new branch via multibranch scan",
+        "Hard quality gate — a failing SonarQube scan blocks the merge",
+        "Dependency vulnerability report attached to every build"
+      ],
+      "folderStructure": [
+        "Jenkinsfile",
+        "pom.xml",
+        "sonar-project.properties"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Quality gates only work if they're enforced in the pipeline, not just displayed on a dashboard",
+        "Caching the local Maven repo between builds saves real pipeline time"
+      ],
+      "challenges": [
+        "Tuning SonarQube's quality gate thresholds so they catch real issues without blocking every branch",
+        "Getting Jenkins credentials scoped correctly per-branch for the Nexus publish step"
+      ],
+      "futureImprovements": [
+        "Migrate the pipeline definition to run in a containerized Jenkins agent",
+        "Add Trivy image scanning once the app is containerized"
+      ]
+    }
+  }
+]

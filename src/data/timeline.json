@@ -1,0 +1,130 @@
+[
+  {
+    "id": "linux",
+    "title": "Linux",
+    "date": "Month 1",
+    "status": "completed",
+    "description": "Learned the filesystem, permissions, process management, and enough shell to stop being afraid of a terminal with no GUI.",
+    "lessons": ["Everything is a file", "chmod and chown solve more problems than you'd expect", "systemd logs are your first debugging stop"]
+  },
+  {
+    "id": "git",
+    "title": "Git",
+    "date": "Month 1",
+    "status": "completed",
+    "description": "Version control as a way of thinking, not just a backup tool — branches, rebases, and the discipline of small commits.",
+    "lessons": ["Commit messages are documentation for future-me", "Rebase locally, merge on shared branches", "git bisect finds bugs faster than reading code"]
+  },
+  {
+    "id": "github",
+    "title": "GitHub",
+    "date": "Month 2",
+    "status": "completed",
+    "description": "Collaboration workflows — pull requests, code review, branch protection, and GitHub Actions as a first CI touchpoint.",
+    "lessons": ["Branch protection rules prevent 90% of accidental prod pushes", "A good PR description saves a reviewer's whole afternoon"]
+  },
+  {
+    "id": "docker",
+    "title": "Docker",
+    "date": "Month 3",
+    "status": "completed",
+    "description": "Containerizing applications — images, layers, volumes, and networking between containers.",
+    "lessons": ["Multi-stage builds keep images small", "Named volumes beat bind mounts for data you care about", "One process per container, mostly"]
+  },
+  {
+    "id": "docker-compose",
+    "title": "Docker Compose",
+    "date": "Month 3",
+    "status": "completed",
+    "description": "Orchestrating multi-container applications locally — the stepping stone before Kubernetes made sense.",
+    "lessons": ["depends_on doesn't mean 'wait until ready'", "Environment files keep secrets out of compose.yml"]
+  },
+  {
+    "id": "jenkins",
+    "title": "Jenkins",
+    "date": "Month 4",
+    "status": "completed",
+    "description": "Building CI pipelines from scratch — multibranch pipelines, quality gates, and artifact publishing.",
+    "lessons": ["Declarative pipelines age better than scripted ones", "Quality gates only matter if they can actually block a merge"]
+  },
+  {
+    "id": "aws",
+    "title": "AWS",
+    "date": "Month 5",
+    "status": "completed",
+    "description": "Core AWS services — EC2, IAM, S3, VPC, and security groups — enough to reason about a real cloud architecture.",
+    "lessons": ["IAM least privilege is worth the setup pain", "Security groups are stateful, NACLs are not"]
+  },
+  {
+    "id": "terraform",
+    "title": "Terraform",
+    "date": "Month 6",
+    "status": "completed",
+    "description": "Infrastructure as code — writing reusable, parameterized modules instead of clicking through the AWS console.",
+    "lessons": ["State files are precious — lock them, back them up", "Modules should read like documentation"]
+  },
+  {
+    "id": "kubernetes",
+    "title": "Kubernetes",
+    "date": "Month 7",
+    "status": "completed",
+    "description": "The core object model — Pods, Deployments, Services, ConfigMaps, Secrets — and how they fit together.",
+    "lessons": ["Declarative beats imperative once you have more than one replica", "Liveness and readiness probes are not optional"]
+  },
+  {
+    "id": "rbac",
+    "title": "RBAC",
+    "date": "Month 8",
+    "status": "completed",
+    "description": "Role-based access control inside the cluster — Roles, RoleBindings, ServiceAccounts, and least-privilege by default.",
+    "lessons": ["Namespace-scoped roles beat cluster-wide ones almost every time", "ServiceAccounts need the same scrutiny as human users"]
+  },
+  {
+    "id": "ingress",
+    "title": "Ingress",
+    "date": "Month 8",
+    "status": "completed",
+    "description": "Routing external traffic into the cluster with NGINX Ingress — hostnames, paths, and TLS termination.",
+    "lessons": ["Annotations do most of the heavy lifting in NGINX Ingress", "One Ingress controller, many Ingress resources"]
+  },
+  {
+    "id": "helm",
+    "title": "Helm",
+    "date": "Month 9",
+    "status": "learning",
+    "description": "Currently templating Kubernetes manifests into reusable charts instead of copy-pasting YAML between environments.",
+    "lessons": ["values.yaml is the real interface of a chart", "Still learning: chart dependencies and subcharts"]
+  },
+  {
+    "id": "argocd",
+    "title": "ArgoCD",
+    "date": "Month 9",
+    "status": "learning",
+    "description": "Learning GitOps delivery — letting Git be the source of truth and ArgoCD reconcile the cluster to match it.",
+    "lessons": ["The reconciliation loop changes how you think about incidents", "Still learning: app-of-apps patterns at scale"]
+  },
+  {
+    "id": "prometheus",
+    "title": "Prometheus",
+    "date": "Month 10",
+    "status": "learning",
+    "description": "Learning metrics collection and PromQL to actually understand what a cluster is doing under load.",
+    "lessons": ["Cardinality is the silent killer of a Prometheus setup", "Still learning: writing alerting rules that don't cause fatigue"]
+  },
+  {
+    "id": "grafana",
+    "title": "Grafana",
+    "date": "Month 10",
+    "status": "learning",
+    "description": "Turning Prometheus metrics into dashboards that answer real questions instead of just displaying numbers.",
+    "lessons": ["A dashboard should answer a question, not just show data", "Still learning: templating dashboards across environments"]
+  },
+  {
+    "id": "future",
+    "title": "What's Next",
+    "date": "Ongoing",
+    "status": "planned",
+    "description": "Service mesh fundamentals, deeper observability, and contributing back to an open-source DevOps project.",
+    "lessons": ["The learning loop doesn't stop — it just gets more specific"]
+  }
+]
