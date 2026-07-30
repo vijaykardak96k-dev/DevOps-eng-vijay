@@ -1,240 +1,281 @@
 [
   {
-    "id": "ci-cd-pipeline-eks",
-    "title": "Zero-Touch CI/CD Pipeline to EKS",
-    "tagline": "Push to main, watch it land in production.",
-    "description": "A fully automated pipeline that takes a commit from GitHub through build, security scan, and deploy into an Amazon EKS cluster — no manual kubectl apply, ever.",
-    "image": "/projects/ci-cd-pipeline.svg",
+    "id": "retail-store-microservices-k8s",
+    "title": "Retail Store Microservices Deployment on Kubernetes",
+    "tagline": "End-to-end orchestration of an 8+ service microservices architecture.",
+    "description": "A production-grade Kubernetes deployment of a polyglot microservices retail platform featuring StatefulSets, MongoDB replication, NGINX ingress routing, and decoupled state management.",
+    "image": "/projects/retail-microservices.svg",
     "featured": true,
     "status": "completed",
-    "techStack": ["GitHub Actions", "Docker", "Terraform", "AWS EKS", "Trivy", "SonarQube"],
-    "githubUrl": "https://github.com/vijaykardak96k-dev/ci-cd-pipeline-eks",
+    "techStack": ["Kubernetes", "Docker", "MongoDB", "NGINX Ingress", "AWS", "Helm", "ConfigMaps", "Secrets"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/retail-store-microservices-k8s",
     "demoUrl": "",
     "details": {
-      "overview": "This project automates the full lifecycle of a containerized application: every push triggers a build, a static code scan, an image vulnerability scan, and a rolling deploy to a Kubernetes cluster on AWS, provisioned entirely with Terraform.",
-      "architecture": "GitHub Actions runs on push → builds a Docker image → SonarQube scans code quality → Trivy scans the image for CVEs → image is pushed to ECR → a Helm chart is applied to an EKS cluster provisioned by Terraform → rollout status is verified before the job is marked green.",
+      "overview": "Flagship project orchestrating 8+ microservices (including React frontend, API gateways, and specialized backend logic) onto a production-ready Kubernetes environment.",
+      "architecture": "React frontend routes through NGINX Ingress to internal services. Stateful services run via StatefulSets backed by persistent storage, while stateless services utilize rolling updates with init containers managing startup dependencies.",
       "features": [
-        "One command Terraform provisioning for the entire EKS cluster and VPC",
-        "Automated image vulnerability scanning that fails the build on critical CVEs",
-        "Blue/green style rolling deployments with automatic rollback on failed health checks",
-        "Slack notification on deploy success or failure"
+        "High-availability MongoDB Replica Set deployment using Kubernetes StatefulSets",
+        "Path-based and host-based routing using NGINX Ingress Controller",
+        "Init containers used for database migration and service-dependency boot sequencing",
+        "Decoupled configuration management with native Kubernetes ConfigMaps and Secrets"
       ],
       "folderStructure": [
-        "infra/ – Terraform modules for VPC, EKS, IAM",
-        "helm/ – Helm chart for the application",
-        ".github/workflows/ – pipeline definitions",
-        "app/ – sample containerized service"
+        "k8s/manifests/ – core Deployment, StatefulSet, and Service specs",
+        "k8s/ingress/ – NGINX routing and TLS configuration",
+        "helm/ – Helm chart for parameterized environment deployment",
+        "scripts/ – cluster bootstrap and teardown helpers"
       ],
       "screenshots": [],
       "lessonsLearned": [
-        "IAM least-privilege for CI service accounts is worth the extra setup time",
-        "Rollout health checks matter more than the deploy step itself"
+        "Proper ordering of service boot cycles via init containers eliminates cascading start failures in microservices",
+        "StatefulSet persistent volume claims require explicit reclaim policies to prevent accidental data loss during updates"
       ],
       "challenges": [
-        "Getting Terraform state locking right across multiple environments",
-        "Tuning readiness probes so rollbacks triggered fast enough to matter"
+        "Configuring stable MongoDB replica set elections inside a dynamic pod network",
+        "Setting precise CPU/Memory requests and limits across 8+ distinct containers to optimize node utilization"
       ],
       "futureImprovements": [
-        "Swap manual Helm apply for ArgoCD-driven GitOps",
-        "Add canary deployments with automated traffic shifting"
+        "Implement GitOps deployment patterns using ArgoCD",
+        "Add automated horizontal pod autoscaling (HPA) based on custom metrics"
       ]
     }
   },
   {
-    "id": "k8s-observability-stack",
-    "title": "Kubernetes Observability Stack",
-    "tagline": "If it's running in the cluster, I can see it.",
-    "description": "A self-hosted monitoring stack for Kubernetes bringing metrics, dashboards, and alerting together for every workload in the cluster.",
-    "image": "/projects/observability-stack.svg",
-    "featured": true,
-    "status": "learning",
-    "techStack": ["Kubernetes", "Prometheus", "Grafana", "Helm"],
-    "githubUrl": "https://github.com/vijaykardak96k-dev/k8s-observability-stack",
-    "demoUrl": "",
-    "details": {
-      "overview": "A learning-focused project to stand up a production-shaped observability stack: Prometheus scraping cluster and application metrics, Grafana dashboards for visualization, and alerting rules for the failure modes that actually matter.",
-      "architecture": "Prometheus Operator deployed via Helm scrapes node-exporter and kube-state-metrics, plus custom application metrics exposed on /metrics. Grafana reads from Prometheus as a data source and renders pre-built dashboards. Alertmanager routes critical alerts to Slack.",
-      "features": [
-        "Pre-built Grafana dashboards for node, pod, and application-level metrics",
-        "Custom alerting rules for pod crash loops and memory pressure",
-        "Helm values file to toggle which exporters get deployed"
-      ],
-      "folderStructure": [
-        "helm-values/ – custom values.yaml overrides",
-        "dashboards/ – exported Grafana JSON dashboards",
-        "alerts/ – Prometheus alerting rules"
-      ],
-      "screenshots": [],
-      "lessonsLearned": [
-        "Cardinality matters — over-labeling metrics quietly kills Prometheus performance",
-        "A good dashboard answers a question, it doesn't just display numbers"
-      ],
-      "challenges": [
-        "Right-sizing Prometheus storage retention on a small home lab cluster",
-        "Writing alert rules with just enough sensitivity to not create alert fatigue"
-      ],
-      "futureImprovements": [
-        "Add Loki for log aggregation alongside metrics",
-        "Wire alerts into an on-call rotation tool"
-      ]
-    }
-  },
-  {
-    "id": "gitops-argocd-demo",
-    "title": "GitOps Delivery with ArgoCD",
-    "tagline": "Git is the single source of truth. ArgoCD makes sure the cluster agrees.",
-    "description": "A GitOps workflow where every cluster change starts as a pull request, and ArgoCD continuously reconciles the live cluster state to match Git.",
-    "image": "/projects/gitops-argocd.svg",
-    "featured": false,
-    "status": "learning",
-    "techStack": ["ArgoCD", "Kubernetes", "Helm", "GitHub"],
-    "githubUrl": "https://github.com/vijaykardak96k-dev/gitops-argocd-demo",
-    "demoUrl": "",
-    "details": {
-      "overview": "A small but complete GitOps setup: application manifests live in a Git repo, ArgoCD watches that repo, and any drift between the repo and the live cluster gets automatically corrected.",
-      "architecture": "ArgoCD Application resources point at a Git repo containing Helm charts. On every merge to main, ArgoCD detects the diff and syncs the cluster. Manual `kubectl edit` on any resource gets reverted automatically on the next reconciliation loop.",
-      "features": [
-        "Self-healing deployments — manual cluster edits get reverted to match Git",
-        "App-of-apps pattern to manage multiple services from one root application",
-        "Sync waves to control deployment order across dependent services"
-      ],
-      "folderStructure": [
-        "apps/ – ArgoCD Application manifests",
-        "charts/ – per-service Helm charts",
-        "environments/ – dev and staging value overrides"
-      ],
-      "screenshots": [],
-      "lessonsLearned": [
-        "GitOps changes how you think about incidents — you fix the repo, not the cluster",
-        "Sync waves are essential once services have real dependencies between them"
-      ],
-      "challenges": [
-        "Understanding ArgoCD's reconciliation loop timing during first setup",
-        "Structuring the repo so dev and staging don't fight over the same values"
-      ],
-      "futureImprovements": [
-        "Add ArgoCD Notifications for Slack sync status",
-        "Introduce progressive delivery with Argo Rollouts"
-      ]
-    }
-  },
-  {
-    "id": "dockerized-mern-deployment",
-    "title": "Dockerized MERN Stack Deployment",
-    "tagline": "One docker-compose up, four services, zero setup docs needed.",
-    "description": "A full MERN application containerized with Docker Compose, reverse-proxied through NGINX, ready to run identically on a laptop or a server.",
-    "image": "/projects/mern-docker.svg",
+    "id": "k8s-cicd-pipeline-jenkins",
+    "title": "Production CI/CD Pipeline for Kubernetes",
+    "tagline": "From git push to Kubernetes rollout with security and quality gates built in.",
+    "description": "An automated CI/CD pipeline built on Jenkins that runs static analysis with SonarQube, security scanning with Trivy, artifact pushing to Nexus/Docker Hub, and zero-downtime deployment to Kubernetes.",
+    "image": "/projects/jenkins-k8s-pipeline.svg",
     "featured": true,
     "status": "completed",
-    "techStack": ["Docker Compose", "NodeJS", "React", "MongoDB", "NGINX"],
-    "githubUrl": "https://github.com/vijaykardak96k-dev/dockerized-mern-deployment",
+    "techStack": ["Jenkins", "GitHub", "Docker", "SonarQube", "Trivy", "Nexus", "Kubernetes"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/k8s-cicd-pipeline-jenkins",
     "demoUrl": "",
     "details": {
-      "overview": "A MERN stack application (MongoDB, Express, React, Node) fully containerized so that the exact same environment runs in development and production, with NGINX handling reverse proxy and static asset serving.",
-      "architecture": "docker-compose orchestrates four services: a MongoDB container with a named volume for persistence, a Node/Express API container, a React frontend built into static assets, and an NGINX container reverse-proxying API calls and serving the frontend.",
+      "overview": "Automates the software supply chain by integrating code quality enforcement, container image security checks, artifact versioning, and direct Kubernetes deployment.",
+      "architecture": "GitHub Webhook → Jenkins Pipeline → Maven Build & SonarQube Analysis → Trivy CVE Image Scan → Docker Hub / Nexus Push → Rolling deployment to Kubernetes cluster.",
       "features": [
-        "Single command startup for the entire stack",
-        "Named volumes so database data survives container restarts",
-        "NGINX reverse proxy routing /api to the backend and everything else to the frontend build",
-        "Environment-based configuration via .env files, never hardcoded"
+        "Hard security gates: pipeline fails immediately if Trivy detects HIGH or CRITICAL CVEs",
+        "Quality gate integration enforcing SonarQube rules before artifact creation",
+        "Artifact management leveraging Nexus Repository Manager for container and application builds",
+        "Zero-downtime rolling updates directly applied to Kubernetes deployments"
       ],
       "folderStructure": [
-        "client/ – React frontend",
-        "server/ – Express API",
-        "nginx/ – reverse proxy config",
-        "docker-compose.yml – service orchestration"
+        "Jenkinsfile – declarative pipeline definition",
+        "k8s/ – deployment and service manifests updated by CI",
+        "sonar-project.properties – static analysis thresholds"
       ],
       "screenshots": [],
       "lessonsLearned": [
-        "Multi-stage Docker builds cut the final image size dramatically",
-        "Named volumes vs bind mounts matters a lot for database durability"
+        "Automated vulnerability scans are only effective if they act as hard pipeline blockers",
+        "Caching build dependencies within the agent speeds up containerized builds significantly"
       ],
       "challenges": [
-        "Getting NGINX to correctly proxy WebSocket connections for hot reload in dev",
-        "Keeping build times reasonable with proper Docker layer caching"
+        "Handling dynamic image tag propagation cleanly from Jenkins down to the Kubernetes manifests",
+        "Securing Jenkins credentials for Kubernetes API access without exposing SA tokens"
       ],
       "futureImprovements": [
-        "Add a docker-compose.prod.yml with resource limits",
-        "Move to a Kubernetes deployment for the same stack"
+        "Migrate to containerized, dynamic Jenkins Kubernetes agents",
+        "Incorporate chatops notifications via Slack for pipeline pass/fail status"
       ]
     }
   },
   {
-    "id": "terraform-aws-vpc-module",
-    "title": "Reusable Terraform AWS VPC Module",
-    "tagline": "Infrastructure you can read like documentation.",
-    "description": "A parameterized Terraform module that stands up a production-shaped VPC — public/private subnets, NAT, route tables, and security groups — in one apply.",
-    "image": "/projects/terraform-vpc.svg",
-    "featured": false,
+    "id": "k8s-cluster-kops-aws",
+    "title": "Production Kubernetes Infrastructure with kops on AWS",
+    "tagline": "Declarative, production-grade Kubernetes cluster management on AWS.",
+    "description": "Provisioning and managing a custom, highly-available Kubernetes cluster on AWS using kops, managing IAM roles, Route53, and S3 state storage explicitly.",
+    "image": "/projects/aws-kops-k8s.svg",
+    "featured": true,
     "status": "completed",
-    "techStack": ["Terraform", "AWS", "VPC", "IAM"],
-    "githubUrl": "https://github.com/vijaykardak96k-dev/terraform-aws-vpc-module",
+    "techStack": ["AWS", "kops", "Kubernetes", "Route53", "S3", "IAM"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/k8s-cluster-kops-aws",
     "demoUrl": "",
     "details": {
-      "overview": "A reusable, parameterized Terraform module for standing up a secure AWS VPC: public and private subnets across multiple availability zones, a NAT gateway for outbound-only traffic, and security groups scoped to least privilege.",
-      "architecture": "Root module composes smaller modules for subnets, route tables, NAT gateways, and security groups. Variables control the number of AZs, CIDR ranges, and whether a NAT gateway is single or one-per-AZ.",
+      "overview": "Demonstrates production control-plane provisioning without managed cloud shortcuts, handling control plane nodes, worker nodes, state storage, and networking directly.",
+      "architecture": "kops reads cluster specification from an S3 bucket state store, configures Route53 DNS records, provisions EC2 instances across availability zones, and configures RBAC and network overlays.",
       "features": [
-        "Multi-AZ public and private subnet layout out of the box",
-        "Configurable single NAT gateway or one-per-AZ for high availability",
-        "Sensible default security groups with clearly documented overrides"
+        "Multi-master control plane setup across AWS Availability Zones",
+        "S3 bucket state store for cluster lifecycle and configuration management",
+        "Granular AWS IAM policies scoped specifically for node and control-plane permissions",
+        "Cluster upgrade and node-pool scaling procedures executed strictly via declarative configs"
       ],
       "folderStructure": [
-        "modules/subnets/",
-        "modules/nat/",
-        "modules/security-groups/",
-        "examples/basic/ – a working example root module"
+        "cluster-manifests/ – kops cluster yaml configurations",
+        "iam/ – custom policy definitions for worker node roles",
+        "scripts/ – deployment and verification commands"
       ],
       "screenshots": [],
       "lessonsLearned": [
-        "Good module variables read like a checklist for what actually varies between environments",
-        "One-NAT-per-AZ is a cost decision as much as a reliability one"
+        "Direct cluster management via kops builds a deep understanding of control-plane mechanics compared to managed EKS",
+        "DNS resolution via Route53 is critical during initial control-plane API bootstrapping"
       ],
       "challenges": [
-        "Designing variable defaults that are safe without being opinionated to the point of being unusable",
-        "Writing documentation clear enough that future-me doesn't need to re-read the source"
+        "Troubleshooting network overlay CNI initialization during cold cluster boots",
+        "Fine-tuning IAM permissions for external volume attachments without granting overly permissive admin rights"
       ],
       "futureImprovements": [
-        "Publish the module to the Terraform Registry",
-        "Add automated `terraform plan` checks in CI on every PR"
+        "Automate kops state updates via GitHub Actions workflows",
+        "Integrate cluster autoscaler for worker node pools"
       ]
     }
   },
   {
-    "id": "jenkins-multibranch-pipeline",
-    "title": "Jenkins Multibranch Pipeline with Quality Gates",
-    "tagline": "Every branch gets the same bar to clear.",
-    "description": "A Jenkins multibranch pipeline enforcing code quality and dependency security checks before any branch can be merged.",
-    "image": "/projects/jenkins-pipeline.svg",
+    "id": "aws-ebs-csi-persistent-storage",
+    "title": "Persistent Storage Architecture with AWS EBS CSI Driver",
+    "tagline": "Stateful storage resilience for dynamic cloud workloads.",
+    "description": "Configuring dynamically provisioned persistent volumes in Kubernetes backed by AWS EBS, ensuring stateful pod storage survives node failures and lifecycle events.",
+    "image": "/projects/ebs-csi-storage.svg",
     "featured": false,
     "status": "completed",
-    "techStack": ["Jenkins", "Maven", "SonarQube", "Nexus", "OWASP Dependency Check"],
-    "githubUrl": "https://github.com/vijaykardak96k-dev/jenkins-multibranch-pipeline",
+    "techStack": ["Kubernetes", "AWS EBS", "CSI Driver", "IAM", "StorageClass"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/aws-ebs-csi-persistent-storage",
     "demoUrl": "",
     "details": {
-      "overview": "A Jenkins multibranch pipeline that builds every branch with Maven, runs a SonarQube quality gate, checks dependencies with OWASP Dependency Check, and publishes passing artifacts to Nexus.",
-      "architecture": "Jenkinsfile defines stages for build, unit tests, SonarQube analysis, dependency check, and artifact publish. The pipeline fails fast on any quality gate breach, before an artifact ever reaches Nexus.",
+      "overview": "Implementation of cloud-native persistent storage using the AWS EBS Container Storage Interface (CSI) driver, enabling dynamic volume provisioning and persistent volume retain/reclaim workflows.",
+      "architecture": "Kubernetes PVC → StorageClass (ebs.csi.aws.com) → AWS EBS CSI Controller → Dynamic EBS Volume creation & attachment to target node via IAM OIDC identity.",
       "features": [
-        "Automatic pipeline creation for every new branch via multibranch scan",
-        "Hard quality gate — a failing SonarQube scan blocks the merge",
-        "Dependency vulnerability report attached to every build"
+        "Dynamic volume provisioning utilizing custom StorageClasses (gp2/gp3)",
+        "Configured volume binding modes and expansion capabilities",
+        "IAM service account (IRSA) configuration for security-conscious AWS API calls",
+        "Demonstrated volume recovery and re-attachment across pod restarts"
       ],
       "folderStructure": [
-        "Jenkinsfile",
-        "pom.xml",
-        "sonar-project.properties"
+        "storage/ – StorageClass, PVC, and PV manifest files",
+        "iam/ – OIDC trust policies and IAM role definitions for the CSI driver",
+        "test-app/ – sample stateful workload specifications"
       ],
       "screenshots": [],
       "lessonsLearned": [
-        "Quality gates only work if they're enforced in the pipeline, not just displayed on a dashboard",
-        "Caching the local Maven repo between builds saves real pipeline time"
+        "AZ pinning (topology constraints) is essential because EBS volumes are bound to a single availability zone",
+        "Dynamic volume expansion requires explicit support inside the StorageClass definition"
       ],
       "challenges": [
-        "Tuning SonarQube's quality gate thresholds so they catch real issues without blocking every branch",
-        "Getting Jenkins credentials scoped correctly per-branch for the Nexus publish step"
+        "Debugging permissions issue between pod service accounts and AWS IAM policies during driver setup",
+        "Handling mount-lock timeouts when moving stateful pods across worker nodes"
       ],
       "futureImprovements": [
-        "Migrate the pipeline definition to run in a containerized Jenkins agent",
-        "Add Trivy image scanning once the app is containerized"
+        "Implement automated EBS snapshotting routines using VolumeSnapshots",
+        "Explore multi-AZ shared storage options using EFS CSI driver"
+      ]
+    }
+  },
+  {
+    "id": "k8s-networking-ingress-nginx",
+    "title": "Kubernetes Ingress & Network Traffic Management",
+    "tagline": "Controlling external traffic into the cluster with precision.",
+    "description": "Advanced HTTP/HTTPS routing configurations using NGINX Ingress Controller on Kubernetes, handling host-based and path-based routing across internal services.",
+    "image": "/projects/k8s-ingress.svg",
+    "featured": false,
+    "status": "completed",
+    "techStack": ["Kubernetes", "NGINX Ingress", "DNS", "AWS ALB/NLB", "Linux"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/k8s-networking-ingress-nginx",
+    "demoUrl": "",
+    "details": {
+      "overview": "A dedicated networking project establishing an entry point for external traffic into a Kubernetes cluster with centralized URL routing, SSL termination, and load balancing.",
+      "architecture": "Incoming web requests → Cloud Load Balancer → NGINX Ingress Controller Pods → Kubernetes Services (ClusterIP) → Target Application Pods.",
+      "features": [
+        "Path-based (/api, /app) and Host-based (app.domain.com) traffic distribution",
+        "Centralized SSL/TLS termination at the Ingress layer using Secrets",
+        "Custom ingress annotations for request rewriting, rate limiting, and body size limits",
+        "Integration with cloud load balancers for external IP allocation"
+      ],
+      "folderStructure": [
+        "ingress/ – Ingress resource definitions and rewrite rules",
+        "services/ – underlying ClusterIP backend applications for routing tests",
+        "certs/ – TLS secret templates"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Host headers must be preserved carefully when rewriting paths at the Ingress proxy layer",
+        "Ingress-nginx annotations provide precise control over NGINX location blocks without altering configuration files manually"
+      ],
+      "challenges": [
+        "Resolving redirect loops when configuring SSL redirect rules alongside external load balancers",
+        "Debugging 502 Bad Gateway issues related to container readiness probe timings"
+      ],
+      "futureImprovements": [
+        "Integrate Cert-Manager for fully automated Let's Encrypt TLS certificate generation",
+        "Implement dynamic traffic splitting for blue/green releases via ingress annotations"
+      ]
+    }
+  },
+  {
+    "id": "mysql-ha-kubernetes",
+    "title": "High-Availability MySQL Database Deployment on Kubernetes",
+    "tagline": "Running mission-critical relational databases reliably on K8s.",
+    "description": "Deploying a stateful MySQL database cluster featuring primary-replica replication, headless services for network identity, and dynamic volume persistence.",
+    "image": "/projects/mysql-ha.svg",
+    "featured": false,
+    "status": "completed",
+    "techStack": ["Kubernetes", "MySQL", "StatefulSet", "ConfigMaps", "Persistent Volumes"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/mysql-ha-kubernetes",
+    "demoUrl": "",
+    "details": {
+      "overview": "A pattern for running stateful SQL workloads in Kubernetes using native primitives to ensure deterministic ordering, stable network identifiers, and automated data replication.",
+      "architecture": "StatefulSet provisions `mysql-0` (Primary/Read-Write) and `mysql-x` (Replicas/Read-Only). A Headless Service provides DNS records for individual pods, and ConfigMaps inject custom MySQL replication configs.",
+      "features": [
+        "StatefulSet management securing stable pod hostnames (`mysql-0`, `mysql-1`) across restarts",
+        "Automated initialization scripts via ConfigMaps for replication user creation and binlog tracking",
+        "Separation of Read-Write and Read-Only traffic via dedicated Kubernetes Services",
+        "Persistent Volume Claims per pod ensuring data isolates correctly"
+      ],
+      "folderStructure": [
+        "manifests/ – StatefulSet, Headless Service, and ConfigMap definitions",
+        "scripts/ – data seed and replication check scripts"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Headless Services are indispensable for stateful workloads requiring direct pod-to-pod communication",
+        "Init containers are vital for cloning database baselines before the MySQL server process boots"
+      ],
+      "challenges": [
+        "Configuring GTID-based replication reliably during automated pod rollouts",
+        "Ensuring clean failover execution without causing split-brain scenarios on storage volumes"
+      ],
+      "futureImprovements": [
+        "Transition deployment to a managed MySQL Kubernetes Operator (e.g., Presslabs or Percona)",
+        "Add automated backup CronJobs targeting AWS S3 storage"
+      ]
+    }
+  },
+  {
+    "id": "dockerized-three-tier-app",
+    "title": "Dockerized Three-Tier Application Architecture",
+    "tagline": "Containerizing web, API, and database layers for scalable deployment.",
+    "description": "Multi-container architecture featuring a Flask backend, MariaDB database, and NGINX web server deployed across isolated Docker networks.",
+    "image": "/projects/docker-three-tier.svg",
+    "featured": false,
+    "status": "completed",
+    "techStack": ["Docker", "Docker Compose", "Flask", "MariaDB", "NGINX", "AWS EC2"],
+    "githubUrl": "https://github.com/vijaykardak96k-dev/dockerized-three-tier-app",
+    "demoUrl": "",
+    "details": {
+      "overview": "A production-styled multi-container setup isolating backend services from web traffic using custom Docker bridge networks and Docker Compose orchestration on AWS EC2.",
+      "architecture": "NGINX handles incoming web requests on port 80/443 and proxies dynamic requests to the Flask API. Flask interacts with MariaDB on an internal non-public Docker network.",
+      "features": [
+        "Decoupled multi-tier isolation using custom Docker bridge networks",
+        "Data persistence achieved using Docker named volumes for database storage",
+        "NGINX optimized for static asset delivery and API reverse proxying",
+        "Single-command boot procedure via Docker Compose"
+      ],
+      "folderStructure": [
+        "backend/ – Flask app codebase and Dockerfile",
+        "nginx/ – NGINX configuration and static files",
+        "docker-compose.yml – multi-container orchestration definition"
+      ],
+      "screenshots": [],
+      "lessonsLearned": [
+        "Restricting container exposure to specific internal Docker networks drastically reduces attack surface",
+        "Multi-stage Docker builds reduce overall image size and cut vulnerability count"
+      ],
+      "challenges": [
+        "Configuring container start dependency checks to ensure MariaDB was fully initialized before Flask attempted migrations",
+        "Managing file permissions across Docker host bind mounts for static assets"
+      ],
+      "futureImprovements": [
+        "Migrate container specs into Kubernetes manifests",
+        "Add dynamic resource capping for CPU and memory usage in Compose"
       ]
     }
   }

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "bca-degree",
+    "degree": "Bachelor of Computer Applications (BCA)",
+    "institution": "Vinayakrao Patil Mahavidyalaya",
+    "university": "Dr. Babasaheb Ambedkar Marathwada University (BAMU)",
+    "location": "Vaijapur, Maharashtra, India",
+    "period": "2024 – Present",
+    "status": "Currently in 3rd Year",
+    "expectedCgpa": "8.5 / 10.0",
+    "highlights": [
+      "Specializing in Computer Applications, Systems Networking, and Database Systems",
+      "Building practical projects in DevOps, Kubernetes, Containerization, and Cloud Infrastructure alongside academic coursework"
+    ]
+  }
+]

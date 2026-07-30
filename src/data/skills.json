@@ -1,20 +1,26 @@
 {
   "categories": [
     {
-      "id": "linux",
-      "label": "Linux",
+      "id": "linux-automation",
+      "label": "Linux & Automation",
       "skills": [
         {
-          "name": "Linux",
+          "name": "Linux Administration",
           "level": 90,
           "status": "completed",
           "icon": "terminal"
         },
         {
-          "name": "Bash",
+          "name": "Bash Scripting",
           "level": 85,
           "status": "completed",
           "icon": "square-terminal"
+        },
+        {
+          "name": "YAML",
+          "level": 88,
+          "status": "completed",
+          "icon": "file-text"
         }
       ]
     },
@@ -37,8 +43,50 @@
       ]
     },
     {
+      "id": "containers-orchestration",
+      "label": "Containers & Kubernetes",
+      "skills": [
+        {
+          "name": "Docker & Docker Compose",
+          "level": 88,
+          "status": "completed",
+          "icon": "box"
+        },
+        {
+          "name": "Kubernetes Architecture & Workloads",
+          "level": 82,
+          "status": "completed",
+          "icon": "layers"
+        },
+        {
+          "name": "Kubernetes Networking & Ingress",
+          "level": 75,
+          "status": "completed",
+          "icon": "signpost"
+        },
+        {
+          "name": "Kubernetes Storage & Persistence",
+          "level": 70,
+          "status": "completed",
+          "icon": "database"
+        },
+        {
+          "name": "Helm",
+          "level": 45,
+          "status": "learning",
+          "icon": "anchor"
+        },
+        {
+          "name": "ArgoCD (GitOps)",
+          "level": 40,
+          "status": "learning",
+          "icon": "git-merge"
+        }
+      ]
+    },
+    {
       "id": "cicd",
-      "label": "CI/CD",
+      "label": "CI/CD & Artifact Management",
       "skills": [
         {
           "name": "GitHub Actions",
@@ -53,25 +101,31 @@
           "icon": "settings"
         },
         {
-          "name": "Maven",
+          "name": "Maven (Build Tool)",
           "level": 70,
           "status": "completed",
           "icon": "package"
         },
         {
-          "name": "Nexus",
+          "name": "Nexus Repository",
           "level": 65,
           "status": "completed",
           "icon": "archive"
-        },
+        }
+      ]
+    },
+    {
+      "id": "devsecops",
+      "label": "DevSecOps & Security",
+      "skills": [
         {
-          "name": "SonarQube",
+          "name": "SonarQube (SAST)",
           "level": 68,
           "status": "completed",
           "icon": "shield-check"
         },
         {
-          "name": "Trivy",
+          "name": "Trivy (Vulnerability Scanning)",
           "level": 70,
           "status": "completed",
           "icon": "bug"
@@ -81,222 +135,42 @@
           "level": 60,
           "status": "learning",
           "icon": "shield-alert"
-        }
-      ]
-    },
-    {
-      "id": "containers",
-      "label": "Containers",
-      "skills": [
-        {
-          "name": "Docker",
-          "level": 88,
-          "status": "completed",
-          "icon": "box"
         },
         {
-          "name": "Docker Compose",
-          "level": 85,
-          "status": "completed",
-          "icon": "boxes"
-        }
-      ]
-    },
-    {
-      "id": "kubernetes",
-      "label": "Kubernetes",
-      "skills": [
-        {
-          "name": "Pods",
-          "level": 85,
-          "status": "completed",
-          "icon": "circle"
-        },
-        {
-          "name": "Namespaces",
-          "level": 85,
-          "status": "completed",
-          "icon": "folder"
-        },
-        {
-          "name": "ReplicaSets",
-          "level": 80,
-          "status": "completed",
-          "icon": "copy"
-        },
-        {
-          "name": "Deployments",
-          "level": 85,
-          "status": "completed",
-          "icon": "rocket"
-        },
-        {
-          "name": "Services",
-          "level": 82,
-          "status": "completed",
-          "icon": "network"
-        },
-        {
-          "name": "ConfigMaps",
-          "level": 80,
-          "status": "completed",
-          "icon": "file-cog"
-        },
-        {
-          "name": "Secrets",
-          "level": 78,
-          "status": "completed",
-          "icon": "lock"
-        },
-        {
-          "name": "Persistent Volumes",
-          "level": 72,
-          "status": "completed",
-          "icon": "database"
-        },
-        {
-          "name": "Persistent Volume Claims",
-          "level": 72,
-          "status": "completed",
-          "icon": "database-zap"
-        },
-        {
-          "name": "StatefulSets",
-          "level": 65,
-          "status": "learning",
-          "icon": "layers"
-        },
-        {
-          "name": "DaemonSets",
-          "level": 65,
-          "status": "learning",
-          "icon": "cpu"
-        },
-        {
-          "name": "Jobs",
-          "level": 70,
-          "status": "completed",
-          "icon": "square-check"
-        },
-        {
-          "name": "CronJobs",
-          "level": 70,
-          "status": "completed",
-          "icon": "clock"
-        },
-        {
-          "name": "Ingress",
-          "level": 75,
-          "status": "completed",
-          "icon": "signpost"
-        },
-        {
-          "name": "NGINX Ingress",
-          "level": 75,
-          "status": "completed",
-          "icon": "route"
-        },
-        {
-          "name": "Metrics Server",
-          "level": 60,
-          "status": "learning",
-          "icon": "activity"
-        },
-        {
-          "name": "Horizontal Pod Autoscaler",
-          "level": 60,
-          "status": "learning",
-          "icon": "trending-up"
-        },
-        {
-          "name": "RBAC",
+          "name": "Kubernetes RBAC & Security",
           "level": 70,
           "status": "completed",
           "icon": "key"
-        },
-        {
-          "name": "Authentication",
-          "level": 68,
-          "status": "completed",
-          "icon": "fingerprint-pattern"
-        },
-        {
-          "name": "Authorization",
-          "level": 68,
-          "status": "completed",
-          "icon": "shield"
-        },
-        {
-          "name": "Storage Classes",
-          "level": 62,
-          "status": "learning",
-          "icon": "hard-drive"
-        },
-        {
-          "name": "Helm",
-          "level": 45,
-          "status": "learning",
-          "icon": "anchor"
-        },
-        {
-          "name": "ArgoCD",
-          "level": 40,
-          "status": "learning",
-          "icon": "git-merge"
         }
       ]
     },
     {
-      "id": "cloud",
-      "label": "Cloud",
+      "id": "cloud-iac",
+      "label": "Cloud & Infrastructure as Code",
       "skills": [
         {
-          "name": "AWS",
+          "name": "AWS (EC2, S3, IAM, VPC)",
           "level": 78,
           "status": "completed",
           "icon": "cloud"
-        },
-        {
-          "name": "EC2",
-          "level": 80,
-          "status": "completed",
-          "icon": "server"
-        },
-        {
-          "name": "IAM",
-          "level": 72,
-          "status": "completed",
-          "icon": "user-check"
-        },
-        {
-          "name": "S3",
-          "level": 78,
-          "status": "completed",
-          "icon": "folder-archive"
-        },
-        {
-          "name": "VPC",
-          "level": 68,
-          "status": "completed",
-          "icon": "network"
-        },
-        {
-          "name": "Security Groups",
-          "level": 70,
-          "status": "completed",
-          "icon": "shield"
         },
         {
           "name": "Terraform",
           "level": 74,
           "status": "completed",
           "icon": "blocks"
+        },
+        {
+          "name": "Ansible",
+          "level": 80,
+          "status": "completed",
+          "icon": "cpu"
         }
       ]
     },
     {
-      "id": "monitoring",
-      "label": "Monitoring",
+      "id": "observability",
+      "label": "Monitoring & Observability",
       "skills": [
         {
           "name": "Prometheus",
@@ -309,87 +183,21 @@
           "level": 42,
           "status": "learning",
           "icon": "chart-bar"
-        }
-      ]
-    },
-    {
-      "id": "database",
-      "label": "Database",
-      "skills": [
-        {
-          "name": "MongoDB",
-          "level": 70,
-          "status": "completed",
-          "icon": "database"
         },
         {
-          "name": "MySQL",
-          "level": 72,
-          "status": "completed",
-          "icon": "database"
-        },
-        {
-          "name": "MariaDB",
-          "level": 65,
-          "status": "completed",
-          "icon": "database"
-        }
-      ]
-    },
-    {
-      "id": "programming",
-      "label": "Programming",
-      "skills": [
-        {
-          "name": "NodeJS",
-          "level": 75,
-          "status": "completed",
-          "icon": "hexagon"
-        },
-        {
-          "name": "React",
-          "level": 78,
-          "status": "completed",
-          "icon": "atom"
-        },
-        {
-          "name": "TypeScript",
-          "level": 72,
-          "status": "completed",
-          "icon": "file-code"
-        },
-        {
-          "name": "TailwindCSS",
-          "level": 80,
-          "status": "completed",
-          "icon": "palette"
-        },
-        {
-          "name": "YAML",
-          "level": 88,
-          "status": "completed",
-          "icon": "file-text"
-        },
-        {
-          "name": "Bash",
-          "level": 85,
-          "status": "completed",
-          "icon": "terminal"
-        },
-        {
-          "name": "REST APIs",
-          "level": 78,
-          "status": "completed",
-          "icon": "plug"
+          "name": "Kubernetes Metrics Server",
+          "level": 60,
+          "status": "learning",
+          "icon": "activity"
         }
       ]
     },
     {
       "id": "networking",
-      "label": "Networking",
+      "label": "Networking & Security Infrastructure",
       "skills": [
         {
-          "name": "Networking Fundamentals",
+          "name": "Networking Fundamentals (TCP/IP, DNS, HTTP)",
           "level": 68,
           "status": "completed",
           "icon": "network"
