@@ -1,4 +1,3 @@
-import React from "react";
 import SectionHeading from "../components/SectionHeading";
 import { GithubIcon, LinkedinIcon, InstagramIcon, WhatsAppIcon } from "../components/BrandIcons";
 import { Mail, MapPin } from "lucide-react";
