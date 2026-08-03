@@ -1,19 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Terminal as TerminalIcon } from 'lucide-react';
 
+interface LogItem {
+  type: 'prompt' | 'ascii' | 'system' | 'info' | 'success' | 'error';
+  dir?: string;
+  content: string;
+}
+
 const ASCII_LOGO = `
 █░█ █ ░░█ ▄▀█ █▄█
 ▀▄▀ █ █▄█ █▀█ ░█░   
-[ Vijay | DevOps / SRE Operator Control Terminal v3.0 ]
+[ DevOps / SRE Operator Control Terminal v3.0 ]
 `;
 
-const FILESYSTEM = {
+const FILESYSTEM: Record<string, string[]> = {
   '~': ['about.txt', 'skills.json', 'projects/', 'resume.pdf', 'certifications/'],
   '~/projects': ['retail-store.md', 'three-tier-aws.md', 'k8s-cluster.md'],
   '~/certifications': ['aws-cloud.txt', 'k8s-basics.txt'],
 };
 
-const FILE_CONTENTS = {
+const FILE_CONTENTS: Record<string, string> = {
   'about.txt': `[SYSTEM OPERATOR PROFILE]
 Role: DevOps / SRE Operator
 Mission: Engineering high-availability cloud infrastructure, automated GitOps delivery pipelines, and self-healing Kubernetes clusters.
@@ -45,16 +51,16 @@ const COMMAND_LIST = [
 ];
 
 export default function Terminal() {
-  const [currentDir, setCurrentDir] = useState('~');
-  const [history, setHistory] = useState([]);
-  const [input, setInput] = useState('');
-  const [cmdHistory, setCmdHistory] = useState([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const [isExecuting, setIsExecuting] = useState(false);
+  const [currentDir, setCurrentDir] = useState<string>('~');
+  const [history, setHistory] = useState<LogItem[]>([]);
+  const [input, setInput] = useState<string>('');
+  const [cmdHistory, setCmdHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [isExecuting, setIsExecuting] = useState<boolean>(false);
 
-  const terminalContainerRef = useRef(null);
-  const inputRef = useRef(null);
-  const hasBooted = useRef(false);
+  const terminalContainerRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const hasBooted = useRef<boolean>(false);
 
   const focusTerminal = () => {
     if (inputRef.current) {
@@ -101,7 +107,7 @@ export default function Terminal() {
   }, [history, isExecuting]);
 
   // Command Execution Handler
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (isExecuting) return;
 
@@ -131,8 +137,8 @@ export default function Terminal() {
     setTimeout(focusTerminal, 10);
   };
 
-  const executeCommand = (cmd, args) => {
-    const addLog = (type, content) => {
+  const executeCommand = (cmd: string, args: string[]) => {
+    const addLog = (type: LogItem['type'], content: string) => {
       setHistory((prev) => [...prev, { type, content }]);
     };
 
@@ -198,7 +204,7 @@ Utilities
       }
 
       case 'pwd':
-        addLog('info', `/home/vijay/devops-control/${currentDir.replace('~', '')}`);
+        addLog('info', `/home/devops-control/${currentDir.replace('~', '')}`);
         break;
 
       case 'cd': {
@@ -238,7 +244,7 @@ Utilities
       }
 
       case 'whoami':
-        addLog('info', 'vijay@DevOps-Master (Role: DevOps / SRE Operator)');
+        addLog('info', 'DevOps / SRE Operator');
         break;
 
       case 'about':
@@ -314,13 +320,13 @@ Utilities
         addLog('success', '⚡ Fetching official resume PDF from bucket...');
         const link = document.createElement('a');
         link.href = '/resume.pdf';
-        link.download = 'Vijay_Kardak_DevOps_Resume.pdf';
+        link.download = 'DevOps_Resume.pdf';
         link.click();
         break;
 
       case 'github':
-        addLog('success', '🔗 Route open: https://github.com/vijaykardak96k-dev');
-        window.open('https://github.com/vijaykardak96k-dev', '_blank');
+        addLog('success', '🔗 Route open: GitHub Profile');
+        window.open('https://github.com', '_blank');
         break;
 
       case 'linkedin':
@@ -331,9 +337,7 @@ Utilities
       case 'contact':
         addLog('info', `
 [DIRECT CONTACT ENDPOINTS]
-  • GitHub   : https://github.com/vijaykardak96k-dev
-  • Email    : vijaykardak96k@gmail.com
-  • Phone    : +91 8010906561
+  • GitHub   : https://github.com
   • Location : Maharashtra, India
 `);
         break;
@@ -349,7 +353,7 @@ ingress-nginx-controller-98f2a      1/1     Running   0          14d
 `);
         } else if (args.join(' ') === 'get ingress') {
           addLog('info', `
-CLASS   HOSTS                  ADDRESS        PORTS     AGE
+CLASS   HOSTS                 ADDRESS        PORTS     AGE
 nginx   devops.portfolio.local 192.168.1.10   80, 443   14d
 `);
         } else {
@@ -360,9 +364,9 @@ nginx   devops.portfolio.local 192.168.1.10   80, 443   14d
       case 'docker':
         if (args.join(' ') === 'ps') {
           addLog('info', `
-CONTAINER ID   IMAGE                 COMMAND                  PORTS                    NAMES
-a8f912c3d1e2   portfolio-web:v3.0    "nginx -g 'daemon off"   0.0.0.0:80->80/tcp       web-frontend
-e4b109f2a3c4   redis:7-alpine        "docker-entrypoint.s…"   0.0.0.0:6379->6379/tcp   cart-cache
+CONTAINER ID   IMAGE                COMMAND                PORTS                    NAMES
+a8f912c3d1e2   portfolio-web:v3.0   "nginx -g 'daemon off" 0.0.0.0:80->80/tcp       web-frontend
+e4b109f2a3c4   redis:7-alpine       "docker-entrypoint.s…" 0.0.0.0:6379->6379/tcp   cart-cache
 `);
         } else {
           addLog('system', 'docker: try "docker ps"');
@@ -424,7 +428,7 @@ monitoring      monitoring  1          2026-02-10 10:11:42.821901 +0530 IST   de
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.ctrlKey && e.key === 'l') {
       e.preventDefault();
       setHistory([]);
@@ -492,7 +496,7 @@ monitoring      monitoring  1          2026-02-10 10:11:42.821901 +0530 IST   de
         </div>
         <div className="flex items-center space-x-2 text-slate-400">
           <TerminalIcon className="w-3.5 h-3.5 text-cyan-400" />
-          <span>vijay@DevOps-Master:{currentDir}</span>
+          <span>DevOps-Master:{currentDir}</span>
         </div>
         <span className="text-[10px] text-slate-600 font-sans uppercase tracking-widest font-bold">zsh</span>
       </div>
@@ -506,11 +510,11 @@ monitoring      monitoring  1          2026-02-10 10:11:42.821901 +0530 IST   de
           <div key={idx} className="whitespace-pre-wrap">
             {log.type === 'prompt' && (
               <div className="flex items-center space-x-2">
-                <span className="text-emerald-400 font-bold">vijay@DevOps-Master:{log.dir}$</span>
+                <span className="text-emerald-400 font-bold">DevOps-Master:{log.dir}$</span>
                 <span className="text-slate-100">{log.content}</span>
               </div>
             )}
-            {log.type === 'ascii' && <pre className="text-cyan-400 font-bold leading-none">{log.content}</pre>}
+            {log.type === 'ascii' && <pre className="text-cyan-400 font-bold leading-none overflow-x-auto">{log.content}</pre>}
             {log.type === 'system' && <span className="text-slate-400">{log.content}</span>}
             {log.type === 'info' && <span className="text-slate-200">{log.content}</span>}
             {log.type === 'success' && <span className="text-emerald-400 font-medium">{log.content}</span>}
@@ -520,7 +524,7 @@ monitoring      monitoring  1          2026-02-10 10:11:42.821901 +0530 IST   de
 
         {/* Input Line */}
         <form onSubmit={handleSubmit} className="flex items-center space-x-2 pt-1">
-          <span className="text-emerald-400 font-bold shrink-0">vijay@DevOps-Master:{currentDir}$</span>
+          <span className="text-emerald-400 font-bold shrink-0">DevOps-Master:{currentDir}$</span>
           <input
             ref={inputRef}
             type="text"

@@ -1,10 +1,8 @@
-import React, { useState, type FormEvent } from "react";
+import React from "react";
 import SectionHeading from "../components/SectionHeading";
 import { GithubIcon, LinkedinIcon, InstagramIcon, WhatsAppIcon } from "../components/BrandIcons";
 import { Mail, MapPin } from "lucide-react";
 import profile from "../data/profile.json";
-
-// IMPORTS YOUR NEW TERMINAL COMPONENT
 import Terminal from "./Terminal"; 
 
 const SOCIALS = [
