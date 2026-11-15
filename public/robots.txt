@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vijaykardak.dev/sitemap.xml
+Sitemap: https://devops-eng-vijay.onrender.com/sitemap.xml

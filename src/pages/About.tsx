@@ -1,83 +1,30 @@
-import { motion } from "framer-motion";
-import { Target, Sparkles, Compass, MapPin } from "lucide-react";
-import SectionHeading from "../components/SectionHeading";
-import profile from "../data/profile.json";
+import { Link } from "react-router-dom";
+import { profile } from "../data/site";
+import PageHead from "../components/PageHead";
+import { useSeo } from "../lib/seo";
 
 export default function About() {
+  useSeo("About", "Vijay Kardak, a final-year BCA student in India building hands-on DevOps and cloud projects and looking for entry-level DevOps or Cloud Engineer roles.", "/about");
+  const rows: [string, string][] = [
+    ["Who", "Final-year BCA student in India, learning DevOps by building and deploying projects."],
+    ["Education", `${profile.education.degree}. ${profile.education.college}, affiliated to ${profile.education.university}.`],
+    ["Approach", "I learn by building infrastructure, deploying applications and troubleshooting the systems behind them, then writing down how each piece works."],
+    ["Practised", "Linux, Git, Docker, Kubernetes, Jenkins, AWS, CI/CD and infrastructure automation. See the skills page for how well I know each one."],
+    ["Improving now", "Helm, ArgoCD (GitOps), Prometheus and Grafana."],
+    ["Looking for", "Fresher, junior, trainee and entry-level DevOps or Cloud Engineer roles."],
+  ];
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-32 pb-24">
-      <SectionHeading eyebrow="About me" title="The story behind the pipelines" align="left" />
-
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-[1fr_260px]">
-        <div className="space-y-5">
-          {profile.about.story.map((para, i) => (
-            <motion.p
-              key={i}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="leading-relaxed text-zinc-400"
-            >
-              {para}
-            </motion.p>
-          ))}
-
-          <div className="grid grid-cols-1 gap-4 pt-6 sm:grid-cols-2">
-            <div className="rounded-xl border border-white/5 bg-[var(--color-card)] p-5">
-              <Compass size={18} style={{ color: "var(--color-secondary)" }} />
-              <h3 className="mt-3 font-display text-sm font-semibold">Why DevOps</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{profile.about.whyDevOps}</p>
-            </div>
-            <div className="rounded-xl border border-white/5 bg-[var(--color-card)] p-5">
-              <Sparkles size={18} style={{ color: "var(--color-accent)" }} />
-              <h3 className="mt-3 font-display text-sm font-semibold">How I learn</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{profile.about.learningMindset}</p>
-            </div>
+    <div className="mx-auto max-w-[1200px] px-5 md:px-8">
+      <PageHead label="02 — About" title="A student building real infrastructure." />
+      <dl className="border-t border-ink">
+        {rows.map(([k, v]) => (
+          <div key={k} className="grid md:grid-cols-12 gap-2 py-5 border-b border-rule">
+            <dt className="label md:col-span-3 pt-1">{k}</dt>
+            <dd className="md:col-span-9 prose-ed">{v}</dd>
           </div>
-
-          <div className="rounded-xl border border-white/5 bg-[var(--color-card)] p-5">
-            <div className="flex items-center gap-2">
-              <Target size={18} style={{ color: "var(--color-primary)" }} />
-              <h3 className="font-display text-sm font-semibold">Where I'm going</h3>
-            </div>
-            <ul className="mt-3 space-y-2">
-              {profile.about.goals.map((goal) => (
-                <li key={goal} className="flex items-start gap-2 text-sm text-zinc-400">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--color-secondary)" }} />
-                  {goal}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <motion.aside
-          initial={{ opacity: 0, x: 16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="h-fit rounded-2xl border border-white/5 bg-[var(--color-card)] p-6"
-        >
-          <div
-            className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl text-2xl font-bold text-white"
-            style={{ background: "linear-gradient(135deg, var(--color-primary), var(--color-secondary))" }}
-          >
-            VK
-          </div>
-          <h3 className="mt-4 text-center font-display text-lg font-semibold">{profile.name}</h3>
-          <p className="mt-1 flex items-center justify-center gap-1.5 text-center text-xs text-zinc-500">
-            <MapPin size={13} /> {profile.location}
-          </p>
-          <div className="mt-5 space-y-2 border-t border-white/5 pt-5 text-xs text-zinc-500">
-            {profile.titles.map((title) => (
-              <div key={title} className="flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full" style={{ background: "var(--color-success)" }} />
-                {title}
-              </div>
-            ))}
-          </div>
-        </motion.aside>
-      </div>
+        ))}
+      </dl>
+      <p className="mt-8"><Link className="link" to="/projects">See what I've built →</Link> · <Link className="link" to="/contact">Get in touch →</Link></p>
     </div>
   );
 }

@@ -1,60 +1,71 @@
-import SectionHeading from "../components/SectionHeading";
-import { GithubIcon, LinkedinIcon, InstagramIcon, WhatsAppIcon } from "../components/BrandIcons";
-import { Mail, MapPin } from "lucide-react";
-import profile from "../data/profile.json";
-import Terminal from "./Terminal"; 
+import { useState, type FormEvent } from "react";
+import { profile } from "../data/site";
+import { validateContact, LIMITS } from "../../shared/validate.js";
+import PageHead from "../components/PageHead";
+import { useSeo } from "../lib/seo";
 
-const SOCIALS = [
-  { href: profile.githubUrl, icon: GithubIcon, label: "GitHub", value: `@${profile.github}` },
-  { href: profile.linkedinUrl, icon: LinkedinIcon, label: "LinkedIn", value: profile.linkedin },
-  { href: `mailto:${profile.email}`, icon: Mail, label: "Email", value: profile.email },
-  { href: profile.whatsappUrl, icon: WhatsAppIcon, label: "WhatsApp", value: profile.whatsapp },
-  { href: profile.instagramUrl, icon: InstagramIcon, label: "Instagram", value: `@${profile.instagram}` },
-];
+type Status = "idle" | "loading" | "success" | "error";
+const empty = { name: "", email: "", subject: "", message: "" };
+type Errors = ReturnType<typeof validateContact>;
+const API = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
 
 export default function Contact() {
+  useSeo("Contact", "Contact Vijay Kardak about entry-level DevOps and Cloud Engineer roles: email, GitHub, LinkedIn or the contact form.", "/contact");
+  const [v, setV] = useState(empty);
+  const [website, setWebsite] = useState("");
+  const [errors, setErrors] = useState<Errors>({});
+  const [status, setStatus] = useState<Status>("idle");
+  const [msg, setMsg] = useState("");
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    const errs = validateContact(v);
+    setErrors(errs);
+    if (Object.keys(errs).length) { setStatus("idle"); return; }
+    setStatus("loading"); setMsg("");
+    try {
+      const r = await fetch(`${API}/api/contact`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...v, website }) });
+      const j = (await r.json().catch(() => ({}))) as { error?: string; errors?: Errors };
+      if (!r.ok) { if (j.errors) setErrors(j.errors); setMsg(j.error ?? "Something went wrong."); setStatus("error"); return; }
+      setStatus("success"); setV(empty);
+    } catch {
+      setMsg("Could not reach the server. Please email me directly."); setStatus("error");
+    }
+  }
+
+  const field = (k: keyof typeof empty, label: string, opts: { type?: string; area?: boolean } = {}) => {
+    const err = errors[k];
+    const common = { id: k, name: k, value: v[k], maxLength: LIMITS[k], "aria-invalid": !!err, "aria-describedby": err ? `${k}-err` : undefined, onChange: (e: { target: { value: string } }) => setV((s) => ({ ...s, [k]: e.target.value })), className: "mt-1 w-full border border-ink bg-paper px-3 py-2" };
+    return (
+      <div>
+        <label htmlFor={k} className="label">{label}</label>
+        {opts.area ? <textarea rows={6} {...common} /> : <input type={opts.type ?? "text"} {...common} />}
+        {err && <p id={`${k}-err`} role="alert" className="text-sm text-accent mt-1">{err}</p>}
+      </div>
+    );
+  };
+
   return (
-    <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-32 pb-24">
-      <SectionHeading
-        eyebrow="Get in touch"
-        title="Let's build something reliable together"
-        description="Open to DevOps roles, internships, and interesting infrastructure problems."
-      />
-
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.3fr]">
-        {/* Left Side: Contact Links */}
-        <div className="space-y-3.5">
-          {SOCIALS.map(({ href, icon: Icon, label, value }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="focus-ring group flex items-center gap-4 rounded-xl border border-white/5 bg-[var(--color-card)] p-4 transition-all hover:border-white/10 hover:bg-white/[0.02]"
-            >
-              <span
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
-                style={{ background: "color-mix(in srgb, var(--color-primary) 15%, transparent)" }}
-              >
-                <Icon size={18} style={{ color: "var(--color-secondary)" }} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs text-zinc-500">{label}</p>
-                <p className="truncate text-sm font-medium text-zinc-200">{value}</p>
-              </div>
-            </a>
-          ))}
-
-          <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-[var(--color-card)] px-4 py-3 text-xs text-zinc-400">
-            <MapPin size={16} className="text-cyan-400 shrink-0" />
-            <span>{profile.location}</span>
+    <div className="mx-auto max-w-[1200px] px-5 md:px-8">
+      <PageHead label="06 — Contact" title="Let's talk about a role." intro="I'm looking for fresher, junior, trainee and entry-level DevOps or Cloud Engineer opportunities." />
+      <div className="grid gap-12 md:grid-cols-12 border-t border-ink pt-8">
+        <ul className="md:col-span-4 space-y-3 text-sm">
+          <li><span className="label block">Email</span><a className="link" href={`mailto:${profile.email}`}>{profile.email}</a></li>
+          <li><span className="label block">GitHub</span><a className="link" href={profile.github} rel="noopener noreferrer">{profile.github.replace("https://", "")}</a></li>
+          <li><span className="label block">LinkedIn</span><a className="link" href={profile.linkedin} rel="noopener noreferrer">{profile.linkedin.replace("https://www.", "")}</a></li>
+          <li><span className="label block">WhatsApp (optional)</span><a className="link" href={profile.whatsapp} rel="noopener noreferrer">Message on WhatsApp</a></li>
+        </ul>
+        <form onSubmit={submit} noValidate className="md:col-span-8 space-y-5" aria-label="Contact form">
+          <div className="grid gap-5 sm:grid-cols-2">{field("name", "Name")}{field("email", "Email", { type: "email" })}</div>
+          {field("subject", "Subject")}
+          {field("message", "Message", { area: true })}
+          <div aria-hidden="true" className="absolute -left-[9999px]"><label>Website<input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label></div>
+          <button type="submit" disabled={status === "loading"} className="bg-ink text-paper px-6 py-3 text-sm hover:bg-accent transition-colors disabled:opacity-60">{status === "loading" ? "Sending…" : "Send message"}</button>
+          <div aria-live="polite">
+            {status === "success" && <p className="border border-ink bg-paper-2 px-4 py-3">Thanks. Your message was sent and I'll reply by email.</p>}
+            {status === "error" && <p role="alert" className="border border-accent text-accent px-4 py-3">{msg}</p>}
           </div>
-        </div>
-
-        {/* Right Side: Render Terminal Component */}
-        <div>
-          <Terminal />
-        </div>
+        </form>
       </div>
     </div>
   );

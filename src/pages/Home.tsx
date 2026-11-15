@@ -1,178 +1,57 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Mail, Download, ArrowRight } from "lucide-react";
-import { GithubIcon } from "../components/BrandIcons";
-import FloatingShapes from "../components/FloatingShapes";
-import TypingText from "../components/TypingText";
-import DeployTerminal from "../components/DeployTerminal";
-import AnimatedCounter from "../components/AnimatedCounter";
-import SectionHeading from "../components/SectionHeading";
-import ProjectCard from "../components/ProjectCard";
-import TimelineItem from "../components/TimelineItem";
-import profile from "../data/profile.json";
-import projectsData from "../data/projects.json";
-import timelineData from "../data/timeline.json";
-import type { Project, TimelineItem as TimelineItemType } from "../types";
+import { profile } from "../data/site";
+import { projects } from "../data/projects";
+import ProjectEntry from "../components/ProjectEntry";
+import { useSeo } from "../lib/seo";
 
-const projects = projectsData as Project[];
-const timeline = timelineData as TimelineItemType[];
-const featured = projects.filter((p) => p.featured).slice(0, 3);
-const recentTimeline = timeline.slice(-4);
+const focus = ["Linux and shell", "Containers with Docker", "Kubernetes workloads and networking", "AWS infrastructure", "CI/CD pipelines", "Infrastructure automation"];
 
 export default function Home() {
+  useSeo("Vijay Kardak — Entry-Level DevOps & Cloud Engineer", "Entry-level DevOps and Cloud Engineer in India. Linux, AWS, Kubernetes, containers and CI/CD, documented through six hands-on projects.", "/");
   return (
-    <div>
-      {/* Hero */}
-      <section className="relative flex min-h-[92vh] items-center overflow-hidden bg-grid pt-24">
-        <FloatingShapes />
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs text-zinc-400"
-            >
-              <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--color-success)" }} />
-              Available for opportunities
-            </span>
-
-            <h1 className="font-display mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              Hey, I'm <span className="text-gradient">{profile.name}</span>
-            </h1>
-
-            <div className="mt-3 h-9 font-mono text-lg text-zinc-300 sm:text-xl">
-              <TypingText words={profile.titles} className="text-gradient" />
-            </div>
-
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-zinc-400">
-              {profile.tagline} I design, containerize, and ship infrastructure — then write down every lesson learned so the next deploy is quieter than the last.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/projects"
-                className="focus-ring inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.03]"
-                style={{ background: "linear-gradient(135deg, var(--color-primary), var(--color-secondary))" }}
-              >
-                View Projects <ArrowRight size={15} />
-              </Link>
-              <a
-                href={profile.resumeFile}
-                download
-                className="focus-ring inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-zinc-200 hover:bg-white/5 transition-colors"
-              >
-                <Download size={15} /> Resume
-              </a>
-              <a
-                href={profile.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="focus-ring inline-flex h-[46px] w-[46px] items-center justify-center rounded-xl border border-white/10 text-zinc-300 hover:bg-white/5 transition-colors"
-              >
-                <GithubIcon size={17} />
-              </a>
-              <Link
-                to="/contact"
-                aria-label="Contact"
-                className="focus-ring inline-flex h-[46px] w-[46px] items-center justify-center rounded-xl border border-white/10 text-zinc-300 hover:bg-white/5 transition-colors"
-              >
-                <Mail size={17} />
-              </Link>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="flex justify-center lg:justify-end"
-          >
-            <DeployTerminal />
-          </motion.div>
+    <>
+      <section className="mx-auto max-w-[1200px] px-5 md:px-8 pt-12 md:pt-20 grid gap-12 md:grid-cols-12" aria-labelledby="hero">
+        <div className="md:col-span-8">
+          <p className="label">DevOps &amp; Cloud Engineering</p>
+          <h1 id="hero" className="mt-5 text-5xl sm:text-6xl md:text-7xl">Building, deploying and <em className="text-accent">understanding</em> infrastructure.</h1>
+          <p className="mt-8 text-lg text-graphite prose-ed">
+            I'm Vijay Kardak, an entry-level DevOps and Cloud Engineer focused on Linux, AWS, Kubernetes, containerisation and CI/CD automation. I learn by building infrastructure, deploying applications and troubleshooting the systems behind them.
+          </p>
+          <p className="mt-3 font-mono text-xs text-graphite">{profile.role} · {profile.positioning} · {profile.location}</p>
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+            <Link to="/projects" className="bg-ink text-paper px-5 py-3 hover:bg-accent transition-colors">View projects</Link>
+            <a className="link" href={profile.resume} download>Download resume (PDF)</a>
+            <a className="link" href={profile.github} rel="noopener noreferrer">GitHub</a>
+            <a className="link" href={profile.linkedin} rel="noopener noreferrer">LinkedIn</a>
+            <a className="link" href={`mailto:${profile.email}`}>{profile.email}</a>
+          </div>
         </div>
+        <aside className="md:col-span-4" aria-label="Index of work and focus areas">
+          <p className="label border-b border-ink pb-2">Index of work</p>
+          <ol>
+            {projects.map((p) => (
+              <li key={p.id} className="border-b border-rule">
+                <Link to={`/projects/${p.id}`} className="flex gap-3 py-2.5 hover:text-accent">
+                  <span className="font-mono text-xs pt-1 text-graphite">{p.num}</span>
+                  <span className="text-sm leading-snug">{p.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+          <p className="label border-b border-ink pb-2 mt-8">Focus areas</p>
+          <ol className="list-none">
+            {focus.map((f, i) => <li key={f} className="flex gap-3 py-1.5 text-sm border-b border-rule"><span className="font-mono text-xs pt-0.5 text-graphite">{String.fromCharCode(65 + i)}</span>{f}</li>)}
+          </ol>
+        </aside>
       </section>
 
-      {/* Stats */}
-      <section className="relative mx-auto max-w-6xl px-4 sm:px-6 -mt-10">
-        <div className="grid grid-cols-2 gap-4 rounded-2xl border border-white/5 bg-[var(--color-card)] p-6 sm:grid-cols-4">
-          {profile.stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="font-display text-3xl font-bold text-gradient">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              </div>
-              <div className="mt-1 text-xs text-zinc-500">{stat.label}</div>
-            </div>
-          ))}
+      <section className="mx-auto max-w-[1200px] px-5 md:px-8 mt-24" aria-labelledby="work">
+        <div className="flex items-end justify-between mb-6">
+          <h2 id="work" className="text-4xl md:text-5xl"><span className="label block mb-2">Selected work</span>What I've built</h2>
+          <Link to="/projects" className="link text-sm">All six projects →</Link>
         </div>
+        {projects.slice(0, 3).map((p, i) => <ProjectEntry key={p.id} p={p} flip={i % 2 === 1} />)}
       </section>
-
-      {/* Currently learning */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
-        <SectionHeading
-          eyebrow="Right now"
-          title="What I'm learning this quarter"
-          description="The DevOps landscape never stands still — here's what's currently on my bench."
-        />
-        <div className="flex flex-wrap justify-center gap-3">
-          {profile.currentlyLearning.map((item) => (
-            <span
-              key={item}
-              className="gradient-border rounded-full bg-[var(--color-card)] px-4 py-2 font-mono text-sm text-zinc-300"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured projects */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
-        <SectionHeading
-          eyebrow="Featured work"
-          title="Projects worth a second look"
-          description="A sample of pipelines, clusters, and infrastructure I've built end to end."
-        />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
-          ))}
-        </div>
-        <div className="mt-10 text-center">
-          <Link
-            to="/projects"
-            className="focus-ring inline-flex items-center gap-2 text-sm font-semibold"
-            style={{ color: "var(--color-secondary)" }}
-          >
-            See all projects <ArrowRight size={15} />
-          </Link>
-        </div>
-      </section>
-
-      {/* Timeline preview */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
-        <SectionHeading
-          eyebrow="The journey so far"
-          title="Latest milestones"
-          description="A rolling log of what I've picked up recently, straight from the journey page."
-        />
-        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-[1fr_auto_1fr]">
-          {recentTimeline.map((item, i) => (
-            <TimelineItem key={item.id} item={item} index={i} side={i % 2 === 0 ? "left" : "right"} />
-          ))}
-        </div>
-        <div className="mt-10 text-center">
-          <Link
-            to="/journey"
-            className="focus-ring inline-flex items-center gap-2 text-sm font-semibold"
-            style={{ color: "var(--color-secondary)" }}
-          >
-            View full journey <ArrowRight size={15} />
-          </Link>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }
