@@ -1,63 +1,42 @@
 # Vijay Kardak — DevOps & Cloud Engineering Portfolio
 
-Editorial-style portfolio built with React 19, TypeScript, Vite, Tailwind CSS v4 and React Router, served together with a small Express API (contact form) from one Node process.
+A static portfolio built with React 19, TypeScript, Vite, Tailwind CSS v4, React Router, Framer Motion and Lucide icons. No backend, no API, no environment variables. `npm run build` outputs a static `dist/` folder.
 
-## Requirements
-Node.js 20 or newer (22 recommended).
-
-## Install and develop
+## Develop
 ```bash
 npm install
-cp .env.example .env      # then edit (see "Environment variables")
-npm run dev:server        # API on http://localhost:4000
-npm run dev               # site on http://localhost:5173 (proxies /api to :4000)
+npm run dev        # http://localhost:5173
 ```
+Requires Node.js 20+ (22 recommended).
 
-## Quality checks
+## Checks
 ```bash
-npm run lint         # oxlint
-npm test             # Vitest + Testing Library (navigation, projects, detail routes, contact form)
-npm run test:server  # node:test (contact API: validation, 503, success, 502, honeypot, rate limit)
-npm run build        # tsc -b && vite build -> dist/
-npm run check        # everything above in one go
+npm run lint       # oxlint
+npm test           # Vitest + Testing Library
+npm run build      # tsc -b && vite build -> dist/
+npm run check      # tsc, lint, tests and build together
 ```
-GitHub Actions (`.github/workflows/ci.yml`) runs install, `tsc`, lint, both test suites and the build on every push and pull request.
+GitHub Actions (`.github/workflows/ci.yml`) runs install, type-check, lint, tests and build on every push and pull request.
 
-## Production build
-```bash
-npm run build
-npm start            # Express serves dist/ and /api on $PORT (default 4000)
-```
+## Deploy to Render (Static Site)
+`render.yaml` already describes the service. Either use *New → Blueprint*, or create a **Static Site** manually:
 
-## Deploy to Render
-`render.yaml` defines a single **Web Service**:
-- Build command: `npm ci && npm run build`
-- Start command: `npm start`
-- Health check: `/api/health`
+| Setting | Value |
+|---|---|
+| Build command | `npm ci && npm run build` |
+| Publish directory | `dist` |
+| Start command | none (static sites have none) |
 
-Use *New → Blueprint* with this repo, or create a Web Service manually with those commands, then set the environment variables below in the Render dashboard. The site and API share one origin, so no CORS setup or `VITE_API_URL` is needed.
-
-## Environment variables
-| Variable | Where | Purpose |
-|---|---|---|
-| `RESEND_API_KEY` | server | API key from resend.com. Never expose it to the frontend. |
-| `CONTACT_TO_EMAIL` | server | Inbox that receives messages. |
-| `CONTACT_FROM_EMAIL` | server | Sender, e.g. `Portfolio <contact@yourdomain.com>`. Must be on a domain verified in Resend (`onboarding@resend.dev` works for testing). |
-| `CLIENT_ORIGIN` | server, optional | Comma-separated origins allowed via CORS. Only needed if the frontend is hosted elsewhere. |
-| `PORT` | server | Provided by Render. |
-| `VITE_API_URL` | build, optional | API base URL if it is not same-origin. |
-
-If the email variables are missing, `/api/contact` returns **503** and the form shows an error. It never pretends a message was saved, and nothing is written to Render's ephemeral disk.
+**Required for client-side routes:** add a rewrite rule in *Redirects/Rewrites*: source `/*`, destination `/index.html`, action **Rewrite**. (The Blueprint sets this for you.) Without it, opening `/projects/...` directly returns 404.
 
 ## Editing content
 | What | File |
 |---|---|
 | Name, links, education, skills, journey | `src/data/site.ts` |
 | Projects and case studies | `src/data/projects.ts` |
-| Contact validation (shared by form and API) | `shared/validate.js` |
-| SEO per page | `useSeo(...)` call at the top of each page |
+| Per-page SEO | `useSeo(...)` at the top of each page |
 
-**Case studies show only verified detail.** Each project's optional `evidence` object (`steps`, `config`, `deployment`, `verification`, `challenges`, `learned`, `images`) is empty. A section without evidence renders "Not documented yet". Fill them from the real repository (screenshots go in `public/projects/`, referenced under `images`) and the sections appear automatically.
+**Case studies show only what exists.** Each project has an optional `evidence` object (`steps`, `config`, `deployment`, `verification`, `challenges`, `learned`, `images`). Add content to it and the matching numbered section appears; leave it out and the section is omitted. Screenshots go in `public/projects/` and are referenced under `images`.
 
 ## SEO
-`index.html` holds default metadata; `useSeo` updates title, description, canonical and Open Graph URL on navigation. `public/robots.txt`, `public/sitemap.xml` and `public/og-image.png` are included. Canonical URLs use `https://devops-eng-vijay.onrender.com` (`SITE_URL` in `src/data/site.ts`, plus `index.html`, `robots.txt`, `sitemap.xml`). For a custom domain, update those four places. The site is client-rendered, so crawlers that don't run JavaScript see only the default tags.
+`index.html` holds default metadata; `useSeo` updates title, description, canonical and Open Graph URL per route. `public/` contains `robots.txt`, `sitemap.xml`, `og-image.png` and `favicon.svg`. The canonical domain `https://devops-eng-vijay.onrender.com` is set in `src/data/site.ts`, `index.html`, `robots.txt` and `sitemap.xml`; update those four places for a custom domain. The site is client-rendered, so crawlers that skip JavaScript see only the default tags.

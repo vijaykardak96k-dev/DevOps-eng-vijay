@@ -1,23 +1,17 @@
 import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getProject, projects } from "../data/projects";
-import FlowDiagram from "../components/FlowDiagram";
+import Diagram from "../components/Diagram";
 import CodeBlock from "../components/CodeBlock";
+import Reveal from "../components/Reveal";
+import { GithubIcon } from "../components/Icons";
 import NotFound from "./NotFound";
 import { useSeo } from "../lib/seo";
 
-const Missing = () => <p className="border border-dashed border-graphite px-4 py-3 text-sm text-graphite">Not documented yet. This section will be added from the project repository rather than guessed.</p>;
-
-function Section({ n, title, children }: { n: number; title: string; children: ReactNode }) {
-  return (
-    <section className="grid gap-4 md:grid-cols-12 border-t border-ink py-8" aria-labelledby={`s${n}`}>
-      <h2 id={`s${n}`} className="md:col-span-3 text-2xl"><span className="label block mb-1">{String(n).padStart(2, "0")}</span>{title}</h2>
-      <div className="md:col-span-9 space-y-4">{children}</div>
-    </section>
-  );
-}
-
-const List = ({ items }: { items: string[] }) => <ol className="list-decimal pl-5 space-y-2 prose-ed">{items.map((s) => <li key={s}>{s}</li>)}</ol>;
+const Steps = ({ items }: { items: string[] }) => (
+  <ol className="space-y-3">{items.map((s, i) => <li key={s} className="flex gap-4"><span className="mono text-xs text-accent pt-1">{String(i + 1).padStart(2, "0")}</span><span className="max-w-[65ch]">{s}</span></li>)}</ol>
+);
 
 export default function ProjectDetail() {
   const { id = "" } = useParams();
@@ -25,39 +19,50 @@ export default function ProjectDetail() {
   useSeo(p ? p.title : "Project not found", p ? p.summary : "This project does not exist.", `/projects/${id}`);
   if (!p) return <NotFound />;
   const ev = p.evidence ?? {};
+
+  // Only sections that have content are rendered, and they are numbered in order.
+  const sections: { title: string; body: ReactNode }[] = [
+    { title: "Overview", body: <p className="text-lg max-w-[65ch]">{p.overview}</p> },
+    { title: "Objective", body: <p className="max-w-[65ch] text-mute">{p.objective}</p> },
+    { title: "Architecture", body: (
+      <div className="space-y-6">
+        <div className="border border-line bg-panel p-5"><Diagram flow={p.flow} /><p className="text-xs text-mute mt-4">{p.flow.note}</p></div>
+        {ev.images?.map((im) => <img key={im.src} src={im.src} alt={im.alt} loading="lazy" className="border border-line max-w-full" />)}
+        <div className="grid gap-6 sm:grid-cols-2">{p.primer.map((x) => <div key={x.heading}><h3 className="text-2xl">{x.heading}</h3><p className="text-mute mt-2 text-sm">{x.body}</p></div>)}</div>
+      </div>) },
+    { title: "Technologies", body: (
+      <dl className="divide-y divide-line border-y border-line">{p.tech.map((t) => <div key={t.name} className="grid grid-cols-3 gap-3 py-3"><dt className="mono text-sm text-accent">{t.name}</dt><dd className="col-span-2 text-mute">{t.role}</dd></div>)}</dl>) },
+    ...(ev.steps ? [{ title: "Implementation steps", body: <Steps items={ev.steps} /> }] : []),
+    ...(ev.config ? [{ title: "Configuration", body: <div className="space-y-4">{ev.config.map((c) => <CodeBlock key={c.caption} {...c} />)}</div> }] : []),
+    ...(ev.deployment ? [{ title: "Deployment workflow", body: <Steps items={ev.deployment} /> }] : []),
+    ...(ev.verification ? [{ title: "Testing and verification", body: <Steps items={ev.verification} /> }] : []),
+    ...(ev.challenges ? [{ title: "Challenges and solutions", body: <dl className="space-y-5">{ev.challenges.map((c) => <div key={c.problem}><dt className="font-medium">{c.problem}</dt><dd className="text-mute mt-1">{c.fix}</dd></div>)}</dl> }] : []),
+    ...(ev.learned ? [{ title: "What I learned", body: <ul className="list-disc pl-5 space-y-2 max-w-[65ch]">{ev.learned.map((l) => <li key={l}>{l}</li>)}</ul> }] : []),
+  ];
+
   return (
-    <article className="mx-auto max-w-[1200px] px-5 md:px-8 pt-12">
-      <Link to="/projects" className="link text-sm">← All projects</Link>
-      <p className="label mt-8">Case study {p.num} — {p.type}</p>
-      <h1 className="text-4xl sm:text-5xl md:text-6xl mt-3 max-w-[20ch]">{p.title}</h1>
-      <ul className="mt-6 flex flex-wrap gap-1.5" aria-label="Technologies">{p.tech.map((t) => <li key={t.name} className="font-mono text-xs border border-rule px-2 py-0.5">{t.name}</li>)}</ul>
-      <div className="mt-10" />
-      <Section n={1} title="Overview"><p className="prose-ed text-lg">{p.overview}</p></Section>
-      <Section n={2} title="Objective"><p className="prose-ed">{p.objective}</p></Section>
-      <Section n={3} title="Architecture">
-        <FlowDiagram nodes={p.flow.nodes} note={p.flow.note} />
-        {ev.images?.map((im) => <img key={im.src} src={im.src} alt={im.alt} loading="lazy" className="border border-ink max-w-full" />)}
-        <div className="grid gap-6 sm:grid-cols-2">
-          {p.primer.map((x) => <div key={x.heading}><h3 className="text-lg font-semibold font-sans tracking-normal">{x.heading}</h3><p className="text-graphite mt-1">{x.body}</p></div>)}
-        </div>
-      </Section>
-      <Section n={4} title="Technology choices">
-        <dl className="divide-y divide-rule border-y border-rule">
-          {p.tech.map((t) => <div key={t.name} className="grid grid-cols-3 gap-3 py-2"><dt className="font-mono text-sm">{t.name}</dt><dd className="col-span-2 text-graphite">{t.role}</dd></div>)}
-        </dl>
-      </Section>
-      <Section n={5} title="Implementation steps">{ev.steps ? <List items={ev.steps} /> : <Missing />}</Section>
-      <Section n={6} title="Configuration and code">{ev.config ? ev.config.map((c) => <CodeBlock key={c.caption} {...c} />) : <Missing />}</Section>
-      <Section n={7} title="Deployment workflow">{ev.deployment ? <List items={ev.deployment} /> : <Missing />}</Section>
-      <Section n={8} title="Verification and results">{ev.verification ? <List items={ev.verification} /> : <Missing />}</Section>
-      <Section n={9} title="Challenges and troubleshooting">
-        {ev.challenges ? <dl className="space-y-4">{ev.challenges.map((c) => <div key={c.problem}><dt className="font-semibold">{c.problem}</dt><dd className="text-graphite">{c.fix}</dd></div>)}</dl> : <Missing />}
-      </Section>
-      <Section n={10} title="What I learned">{ev.learned ? <ul className="list-disc pl-5 space-y-2 prose-ed">{ev.learned.map((l) => <li key={l}>{l}</li>)}</ul> : <Missing />}</Section>
-      <Section n={11} title="GitHub repository"><a className="link font-mono text-sm break-all" href={p.repo} rel="noopener noreferrer">{p.repo} ↗</a></Section>
-      <Section n={12} title="Related projects">
-        <ul className="space-y-2">{p.related.map((r) => { const rp = projects.find((x) => x.id === r); return rp ? <li key={r}><Link className="link" to={`/projects/${r}`}><span className="font-mono text-xs mr-2">{rp.num}</span>{rp.title}</Link></li> : null; })}</ul>
-      </Section>
+    <article className="mx-auto max-w-[1280px] px-5 md:px-8">
+      <header className="pt-10 pb-12 border-b border-line">
+        <Link to="/projects" className="link text-sm inline-flex items-center gap-2"><ArrowLeft className="size-4" aria-hidden />All projects</Link>
+        <p className="tag mt-10"><span className="text-accent">{p.num}</span> / {p.type}</p>
+        <h1 className="text-5xl sm:text-6xl md:text-8xl mt-3 max-w-[16ch]">{p.title}</h1>
+        <ul className="mt-6 flex flex-wrap gap-1.5" aria-label="Technologies">{p.tech.map((t) => <li key={t.name} className="mono text-xs border border-line px-2.5 py-1">{t.name}</li>)}</ul>
+        <a href={p.repo} rel="noopener noreferrer" className="btn btn-solid mt-8"><GithubIcon />View repository<ArrowUpRight className="size-4" aria-hidden /></a>
+      </header>
+      {sections.map((s, i) => (
+        <Reveal key={s.title}>
+          <section className="grid gap-4 lg:grid-cols-12 py-10 border-b border-line" aria-labelledby={`s${i}`}>
+            <h2 id={`s${i}`} className="min-w-0 lg:col-span-3 text-3xl"><span className="mono text-xs text-accent block mb-2">{String(i + 1).padStart(2, "0")}</span>{s.title}</h2>
+            <div className="min-w-0 lg:col-span-9">{s.body}</div>
+          </section>
+        </Reveal>
+      ))}
+      <section className="py-10 grid gap-4 lg:grid-cols-12" aria-labelledby="rel">
+        <h2 id="rel" className="min-w-0 lg:col-span-3 text-3xl">Related</h2>
+        <ul className="min-w-0 lg:col-span-9 grid gap-3 sm:grid-cols-2">
+          {p.related.map((r) => { const rp = projects.find((x) => x.id === r); return rp ? <li key={r}><Link to={`/projects/${r}`} className="block border border-line p-4 hover:border-accent transition-colors"><span className="mono text-xs text-accent">{rp.num}</span><span className="block font-display text-2xl uppercase mt-1">{rp.title}</span></Link></li> : null; })}
+        </ul>
+      </section>
     </article>
   );
 }

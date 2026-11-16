@@ -7,6 +7,7 @@ export const profile = {
   location: "India",
   email: "vijaykardak96k@gmail.com",
   github: "https://github.com/vijaykardak96k-dev",
+  dockerhub: "https://hub.docker.com/u/vijaykardak",
   linkedin: "https://www.linkedin.com/in/vijay-kardak-9b3817393",
   whatsapp: "https://wa.me/918010906561",
   resume: "/resume.pdf",
@@ -24,6 +25,8 @@ export const levelLabel: Record<SkillLevel, string> = {
   familiar: "Familiar",
   learning: "Currently learning",
 };
+
+export const mark: Record<SkillLevel, string> = { used: "●", "hands-on": "◐", familiar: "○", learning: "◇" };
 
 export interface SkillGroup {
   id: string;
@@ -78,3 +81,18 @@ export const journey: { stage: string; topics: string; mode: "Learned and practi
   { stage: "Infrastructure automation", topics: "Terraform, Ansible", mode: "Learned and practised" },
   { stage: "Next", topics: "Helm, ArgoCD, Prometheus, Grafana", mode: "Learning now" },
 ];
+
+const levelOf = (name: string): SkillLevel => {
+  for (const g of skillGroups) { const f = g.items.find((i) => i.name === name); if (f) return f.level; }
+  throw new Error(`Unknown skill: ${name}`);
+};
+
+/** Home-page overview. Levels are looked up from skillGroups so they can't drift. */
+export const techOverview = [
+  { id: "cloud", title: "Cloud & AWS", blurb: "Compute, storage, identity and DNS on AWS.", names: ["EC2", "S3", "IAM", "VPC", "Route 53"] },
+  { id: "containers", title: "Containers & Kubernetes", blurb: "Images, Compose stacks and cluster workloads.", names: ["Docker", "Docker Compose", "Kubernetes", "Ingress", "Persistent Volumes", "Helm"] },
+  { id: "cicd", title: "CI/CD", blurb: "Source-to-deployment automation.", names: ["Jenkins", "Maven", "Git", "GitHub"] },
+  { id: "iac", title: "Infrastructure automation", blurb: "Declarative provisioning and configuration.", names: ["kops", "Terraform", "Ansible"] },
+  { id: "linux", title: "Linux & monitoring", blurb: "The OS layer, and observability I'm learning next.", names: ["Linux", "Shell scripting", "Prometheus", "Grafana"] },
+  { id: "security", title: "Security & quality", blurb: "Static analysis, image scanning, artifact storage.", names: ["SonarQube", "Trivy", "Nexus", "OWASP scanning"] },
+].map((g) => ({ ...g, items: g.names.map((n) => ({ name: n, level: levelOf(n) })) }));
